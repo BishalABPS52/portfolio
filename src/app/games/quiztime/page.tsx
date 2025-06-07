@@ -1022,7 +1022,7 @@ export default function QuizTimePage() {
     
     // Mark the lifeline as used
     setLifelines(prev => ({ ...prev, [type]: false }));
-  }, [lifelines, lifeLinesRemaining, answerLocked, username, questions, currentQuestionIndex, setTimerPaused, setQuestions, backgroundMusic]);
+  }, [lifelines, lifeLinesRemaining, username, questions, currentQuestionIndex, setTimerPaused, setQuestions]);
   
   const handleUsernameSubmit = useCallback(async (username: string) => {
     setUsername(username);
@@ -1047,7 +1047,7 @@ export default function QuizTimePage() {
     } catch (error) {
       console.error("Error checking asked questions:", error);
     }
-  }, [username, questions, currentQuestionIndex]);
+  }, [username]);
 
   const handleFiftyFifty = useCallback(() => {
     if (lifelines.fiftyFifty && lifeLinesRemaining > 0 && !answerLocked) {
