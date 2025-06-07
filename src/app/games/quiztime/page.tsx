@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -127,7 +127,7 @@ function GameWindow({
   options, 
   onAnswer,
   lifelines,
-  useLifeline,
+  handleLifeline,
   prize,
   questionNumber,
   timer,
@@ -147,7 +147,7 @@ function GameWindow({
     pauseTimer: boolean;
     changeQuestion: boolean;
   };
-  useLifeline: (type: keyof typeof lifelines) => void;
+  handleLifeline: (type: keyof typeof lifelines) => void;
   prize: number;
   questionNumber: number;
   timer: number;
@@ -208,31 +208,31 @@ function GameWindow({
       <div className="flex justify-between p-4 bg-[#000000]/50 rounded-lg">
         <Button 
           text="50-50" 
-          onClick={() => useLifeline('fiftyFifty')} 
+          onClick={() => handleLifeline('fiftyFifty')} 
           isActive={lifelines.fiftyFifty && lifeLinesRemaining > 0 && !answerLocked} 
           type="lifeline" 
         />
         <Button 
           text="Skip" 
-          onClick={() => useLifeline('skip')} 
+          onClick={() => handleLifeline('skip')} 
           isActive={lifelines.skip && lifeLinesRemaining > 0 && !answerLocked} 
           type="lifeline" 
         />
         <Button 
           text="Double" 
-          onClick={() => useLifeline('doubleChance')} 
+          onClick={() => handleLifeline('doubleChance')} 
           isActive={lifelines.doubleChance && lifeLinesRemaining > 0 && !answerLocked} 
           type="lifeline" 
         />
         <Button 
           text="Timer" 
-          onClick={() => useLifeline('pauseTimer')} 
+          onClick={() => handleLifeline('pauseTimer')} 
           isActive={lifelines.pauseTimer && lifeLinesRemaining > 0 && !answerLocked} 
           type="lifeline" 
         />
         <Button 
           text="Change" 
-          onClick={() => useLifeline('changeQuestion')} 
+          onClick={() => handleLifeline('changeQuestion')} 
           isActive={lifelines.changeQuestion && lifeLinesRemaining > 0 && !answerLocked} 
           type="lifeline" 
         />
@@ -318,7 +318,15 @@ function Help({ onBack }: { onBack: () => void }) {
 }
 
 // Stats component
-function Stats({ onBack, stats }: { onBack: () => void; stats: any }) {
+interface GameStats {
+  gamesPlayed: number;
+  correctAnswers: number;
+  wrongAnswers: number;
+  lifelinesUsed: number;
+  highestPrize: number;
+}
+
+function Stats({ onBack, stats }: { onBack: () => void; stats: GameStats }) {
   return (
     <div 
       className="flex flex-col items-center justify-center h-full"
@@ -375,7 +383,7 @@ function EndScreen({ score, onRestart, onMainMenu, username }: {
       highScores.push({ name: username, score });
       
       // Sort by score (highest first) and keep only top 10
-      highScores.sort((a: any, b: any) => b.score - a.score);
+      highScores.sort((a: {score: number}, b: {score: number}) => b.score - a.score);
       highScores = highScores.slice(0, 10);
       
       // Save back to localStorage
@@ -469,15 +477,18 @@ function UsernameEntry({ onSubmit }: { onSubmit: (username: string) => void }) {
   );
 }
 
+// Define the question type
+interface QuizQuestion {
+  question: string;
+  correct: string;
+  wrong: string[];
+  options?: string[];
+}
+
 export default function QuizTimePage() {
   const [screen, setScreen] = useState<'menu' | 'quiz' | 'highscores' | 'help' | 'stats' | 'end' | 'username'>('username');
   const [username, setUsername] = useState<string>('');
-  const [questions, setQuestions] = useState<Array<{
-    question: string;
-    correct: string;
-    wrong: string[];
-    options?: string[];
-  }>>([]);
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [backgroundMusic, setBackgroundMusic] = useState<HTMLAudioElement | null>(null);
@@ -543,7 +554,7 @@ export default function QuizTimePage() {
         console.log("Previously asked questions for", username, ":", userAskedQuestions.length);
         
         // Filter out previously asked questions
-        const filterAskedQuestions = (questions: any[]) => {
+        const filterAskedQuestions = (questions: QuizQuestion[]) => {
           if (!username || !userAskedQuestions.length) return questions;
           return questions.filter(q => !userAskedQuestions.includes(q.question));
         };
@@ -581,7 +592,7 @@ export default function QuizTimePage() {
         const selectedHardQuestions = shuffleArray(availableHardQuestions).slice(0, 7);
         
         // Combine questions
-        const allQuestions = [
+        const allQuestions: QuizQuestion[] = [
           ...selectedEasyQuestions,
           ...selectedMediumQuestions,
           ...selectedHardQuestions
@@ -605,17 +616,12 @@ export default function QuizTimePage() {
         }
         
         // Add options array to each question and shuffle them
-        const questionsWithOptions = allQuestions.map((q: { question: string; correct: string; wrong: string[] }) => {
-          // Take 3 wrong answers randomly if there are more than 3
+        const questionsWithOptions: QuizQuestion[] = allQuestions.map((q) => {
           const wrongOptions = q.wrong.length > 3 
             ? shuffleArray([...q.wrong]).slice(0, 3) 
             : [...q.wrong];
-            
           const options = [...wrongOptions, q.correct];
-          
-          // Shuffle options
-          const shuffledOptions = shuffleArray([...options]);
-          
+          const shuffledOptions = shuffleArray(options);
           return { ...q, options: shuffledOptions };
         });
         
@@ -626,15 +632,15 @@ export default function QuizTimePage() {
       }
     };
     
-    // Helper function to shuffle an array
-    const shuffleArray = (array: any[]) => {
+    // --- Fix shuffleArray to be generic ---
+    function shuffleArray<T>(array: T[]): T[] {
       const newArray = [...array];
       for (let i = newArray.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
       }
       return newArray;
-    };
+    }
     
     // Only load questions if we have a username
     if (username) {
@@ -716,7 +722,7 @@ export default function QuizTimePage() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [screen, timerPaused, timer]);
+  }, [screen, timerPaused, timer, backgroundMusic]);
   
   // Reset timer when moving to a new question
   useEffect(() => {
@@ -831,7 +837,7 @@ export default function QuizTimePage() {
     }, 1000); // Shorter delay (1 second) before proceeding
   };
   
-  const useLifeline = (type: keyof typeof lifelines) => {
+  const handleLifeline = (type: keyof typeof lifelines) => {
     // Check if lifeline is available and if we have lifelines remaining
     if (!lifelines[type] || lifeLinesRemaining <= 0) return;
     
@@ -1050,6 +1056,37 @@ export default function QuizTimePage() {
     }
   };
   
+  // Handler functions for lifelines
+  const handleFiftyFifty = useCallback(() => {
+    if (lifelines.fiftyFifty && lifeLinesRemaining > 0 && !answerLocked) {
+      handleLifeline('fiftyFifty');
+    }
+  }, [lifelines.fiftyFifty, lifeLinesRemaining, answerLocked]);
+
+  const handleSkip = useCallback(() => {
+    if (lifelines.skip && lifeLinesRemaining > 0 && !answerLocked) {
+      handleLifeline('skip');
+    }
+  }, [lifelines.skip, lifeLinesRemaining, answerLocked]);
+
+  const handleDoubleChance = useCallback(() => {
+    if (lifelines.doubleChance && lifeLinesRemaining > 0 && !answerLocked) {
+      handleLifeline('doubleChance');
+    }
+  }, [lifelines.doubleChance, lifeLinesRemaining, answerLocked]);
+
+  const handlePauseTimer = useCallback(() => {
+    if (lifelines.pauseTimer && lifeLinesRemaining > 0 && !answerLocked) {
+      handleLifeline('pauseTimer');
+    }
+  }, [lifelines.pauseTimer, lifeLinesRemaining, answerLocked]);
+
+  const handleChangeQuestion = useCallback(() => {
+    if (lifelines.changeQuestion && lifeLinesRemaining > 0 && !answerLocked) {
+      handleLifeline('changeQuestion');
+    }
+  }, [lifelines.changeQuestion, lifeLinesRemaining, answerLocked]);
+  
   return (
     <>
       <style jsx global>{fontStyles}</style>
@@ -1104,7 +1141,7 @@ export default function QuizTimePage() {
                   options={questions[currentQuestionIndex].options || []}
                   onAnswer={handleAnswer}
                   lifelines={lifelines}
-                  useLifeline={useLifeline}
+                  handleLifeline={handleLifeline}
                   prize={prizeLevels[currentQuestionIndex]}
                   questionNumber={currentQuestionIndex + 1}
                   timer={timer}
