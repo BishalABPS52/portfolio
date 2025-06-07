@@ -1,9 +1,5 @@
 import mongoose from 'mongoose';
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env');
-}
-
 const MONGODB_URI = process.env.MONGODB_URI;
 
 interface MongooseCache {
@@ -18,6 +14,12 @@ if (!globalWithMongoose.mongoose) {
 }
 
 async function dbConnect() {
+  // Check if MongoDB URI is available
+  if (!MONGODB_URI) {
+    console.warn('⚠️ MONGODB_URI not found - database features will be disabled');
+    throw new Error('MongoDB URI not configured');
+  }
+
   const cached = globalWithMongoose.mongoose!;
 
   if (cached.conn) {
@@ -26,7 +28,12 @@ async function dbConnect() {
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(MONGODB_URI).then((mongoose) => {
+      console.log('✅ MongoDB connected successfully');
       return mongoose;
+    }).catch((error) => {
+      console.error('❌ MongoDB connection failed:', error.message);
+      cached.promise = null;
+      throw error;
     });
   }
 
