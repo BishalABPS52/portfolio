@@ -1,4 +1,4 @@
-const dbConnect = require('./db').default;
+import dbConnect from './db';
 
 async function testConnection() {
   try {

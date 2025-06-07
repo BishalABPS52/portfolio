@@ -646,37 +646,36 @@ export default function QuizTimePage() {
     if (username) {
       loadQuestions();
     }
-    
+
     // Initialize audio
     const music = new Audio('/assets/assetsQuiz/music.wav');
     music.loop = true;
     music.volume = 0.5;
     setBackgroundMusic(music);
-    
+
     correctSoundRef.current = new Audio('/assets/assetsQuiz/correct.wav');
     wrongSoundRef.current = new Audio('/assets/assetsQuiz/wrong.mp3');
-    
+
     return () => {
       if (backgroundMusic) {
         backgroundMusic.pause();
         backgroundMusic.currentTime = 0;
       }
     };
-  }, [username]);
-  
-  // Play background music when switching to quiz screen
+  }, [username, backgroundMusic]);
+
+  // Effect for background music
   useEffect(() => {
     if (screen === 'quiz' && backgroundMusic) {
       backgroundMusic.play().catch(e => console.log('Audio play failed:', e));
     } else if (backgroundMusic) {
       backgroundMusic.pause();
-      // If game is over, reset the music position to the beginning
       if (screen === 'end') {
         backgroundMusic.currentTime = 0;
       }
     }
   }, [screen, backgroundMusic]);
-  
+
   // Load game stats from localStorage on component mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -694,35 +693,33 @@ export default function QuizTimePage() {
     }
   }, [gameStats]);
   
-  // Timer logic
+  // Timer effect
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
-    
-    if (screen === 'quiz' && !timerPaused && timer > 0) {
+
+    if (screen === 'quiz' && !timerPaused && timer > 0 && !answerLocked) {
       interval = setInterval(() => {
         setTimer(prev => {
           if (prev <= 1) {
-            // Time's up - handle as wrong answer
             if (wrongSoundRef.current) {
               wrongSoundRef.current.play().catch(e => console.log('Audio play failed:', e));
             }
             setScreen('end');
-            // Stop background music
             if (backgroundMusic) {
               backgroundMusic.pause();
               backgroundMusic.currentTime = 0;
             }
-            clearInterval(interval!);
+            return 0;
           }
           return prev - 1;
         });
       }, 1000);
     }
-    
+
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [screen, timerPaused, timer, backgroundMusic]);
+  }, [screen, timerPaused, timer, answerLocked, backgroundMusic]);
   
   // Reset timer when moving to a new question
   useEffect(() => {
@@ -837,7 +834,7 @@ export default function QuizTimePage() {
     }, 1000); // Shorter delay (1 second) before proceeding
   };
   
-  const handleLifeline = (type: keyof typeof lifelines) => {
+  const handleLifeline = useCallback((type: keyof typeof lifelines) => {
     // Check if lifeline is available and if we have lifelines remaining
     if (!lifelines[type] || lifeLinesRemaining <= 0) return;
     
@@ -1025,18 +1022,14 @@ export default function QuizTimePage() {
     
     // Mark the lifeline as used
     setLifelines(prev => ({ ...prev, [type]: false }));
-  };
+  }, [lifelines, lifeLinesRemaining, answerLocked, username, questions, currentQuestionIndex, setTimerPaused, setQuestions, backgroundMusic]);
   
-  const handleUsernameSubmit = async (username: string) => {
-    // Save the username to state
+  const handleUsernameSubmit = useCallback(async (username: string) => {
     setUsername(username);
-    
-    // Move to the menu screen
     setScreen('menu');
-  };
-  
-  // Function to save asked questions to prevent repeats
-  const saveAskedQuestions = () => {
+  }, []);
+
+  const saveAskedQuestions = useCallback(() => {
     // This function is now primarily used to track which questions the user has seen during gameplay
     // rather than to prevent repeats, since we mark all questions as "asked" when they're selected
     if (!username) return;
@@ -1054,38 +1047,37 @@ export default function QuizTimePage() {
     } catch (error) {
       console.error("Error checking asked questions:", error);
     }
-  };
-  
-  // Handler functions for lifelines
+  }, [username, questions, currentQuestionIndex]);
+
   const handleFiftyFifty = useCallback(() => {
     if (lifelines.fiftyFifty && lifeLinesRemaining > 0 && !answerLocked) {
       handleLifeline('fiftyFifty');
     }
-  }, [lifelines.fiftyFifty, lifeLinesRemaining, answerLocked]);
+  }, [lifelines.fiftyFifty, lifeLinesRemaining, answerLocked, handleLifeline]);
 
   const handleSkip = useCallback(() => {
     if (lifelines.skip && lifeLinesRemaining > 0 && !answerLocked) {
       handleLifeline('skip');
     }
-  }, [lifelines.skip, lifeLinesRemaining, answerLocked]);
+  }, [lifelines.skip, lifeLinesRemaining, answerLocked, handleLifeline]);
 
   const handleDoubleChance = useCallback(() => {
     if (lifelines.doubleChance && lifeLinesRemaining > 0 && !answerLocked) {
       handleLifeline('doubleChance');
     }
-  }, [lifelines.doubleChance, lifeLinesRemaining, answerLocked]);
+  }, [lifelines.doubleChance, lifeLinesRemaining, answerLocked, handleLifeline]);
 
   const handlePauseTimer = useCallback(() => {
     if (lifelines.pauseTimer && lifeLinesRemaining > 0 && !answerLocked) {
       handleLifeline('pauseTimer');
     }
-  }, [lifelines.pauseTimer, lifeLinesRemaining, answerLocked]);
+  }, [lifelines.pauseTimer, lifeLinesRemaining, answerLocked, handleLifeline]);
 
   const handleChangeQuestion = useCallback(() => {
     if (lifelines.changeQuestion && lifeLinesRemaining > 0 && !answerLocked) {
       handleLifeline('changeQuestion');
     }
-  }, [lifelines.changeQuestion, lifeLinesRemaining, answerLocked]);
+  }, [lifelines.changeQuestion, lifeLinesRemaining, answerLocked, handleLifeline]);
   
   return (
     <>
