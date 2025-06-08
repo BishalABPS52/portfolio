@@ -99,9 +99,9 @@ export function optimizeTouchInteraction(element: HTMLElement | null): void {
 
 // Hook to add the 'touch-class' class to interactive elements for mobile devices
 export function useTouchOptimizer(selector = 'a, button, input, select, textarea, [role="button"]') {
+  const { isMobile } = useScreenSize();
+  
   useEffect(() => {
-    const { isMobile } = useScreenSize();
-    
     if (isMobile) {
       // Find all interactive elements
       const elements = document.querySelectorAll(selector);

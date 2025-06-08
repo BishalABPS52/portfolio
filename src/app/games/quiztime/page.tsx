@@ -666,7 +666,7 @@ export default function QuizTimePage() {
         backgroundMusic.currentTime = 0;
       }
     }
-  }, [screen, backgroundMusic]);
+  }, [screen]);
 
   // Load game stats from localStorage on component mount
   useEffect(() => {
@@ -1022,24 +1022,17 @@ export default function QuizTimePage() {
   }, []);
 
   const saveAskedQuestions = useCallback(() => {
-    // This function is now primarily used to track which questions the user has seen during gameplay
-    // rather than to prevent repeats, since we mark all questions as "asked" when they're selected
     if (!username) return;
     
     try {
-      // Get current asked data from localStorage
       const savedAskedData = localStorage.getItem('quizTimeAskedQuestions');
       const askedData = savedAskedData ? JSON.parse(savedAskedData) : { users: {} };
-      
-      // Get current questions for this user
       const userAskedQuestions = askedData.users[username] || [];
-      
-      // Log the current question tracking status
       console.log(`User ${username} has answered ${userAskedQuestions.length} unique questions so far`);
     } catch (error) {
       console.error("Error checking asked questions:", error);
     }
-  }, [username, questions, currentQuestionIndex]);
+  }, [username]);
 
   const handleFiftyFifty = useCallback(() => {
     if (lifelines.fiftyFifty && lifeLinesRemaining > 0 && !answerLocked) {

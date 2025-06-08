@@ -20,6 +20,9 @@ interface GridItem {
   static?: boolean;
 }
 
+// Define types
+type Layouts = {[P: string]: Layout[]};
+
 interface DraggableGridProps {
   children: React.ReactNode[];
   layouts?: Layout[];
@@ -40,7 +43,7 @@ const DraggableGrid: React.FC<DraggableGridProps> = ({ children, layouts }) => {
   ];
 
   // Create layouts for different breakpoints
-  const [responsiveLayouts, setResponsiveLayouts] = useState({
+  const [responsiveLayouts, setResponsiveLayouts] = useState<Layouts>({
     lg: layouts || defaultLayout,
     md: layouts || defaultLayout.map(item => ({ ...item, w: Math.min(item.w, 3) })),
     sm: layouts || defaultLayout.map(item => ({ ...item, w: Math.min(item.w, 2), x: Math.min(item.x, 1) })),
@@ -51,7 +54,7 @@ const DraggableGrid: React.FC<DraggableGridProps> = ({ children, layouts }) => {
     layouts || defaultLayout
   );
 
-  const onLayoutChange = useCallback((layout: Layout[], allLayouts?: any) => {
+  const onLayoutChange = useCallback((layout: Layout[], allLayouts?: Layouts) => {
     setCurrentLayouts(layout);
     
     if (allLayouts) {
@@ -92,7 +95,6 @@ const DraggableGrid: React.FC<DraggableGridProps> = ({ children, layouts }) => {
   return (
     <div className="w-full">
       {isMobile ? (
-        // Simple stacked layout for mobile
         <div className="flex flex-col space-y-4">
           {children.map((child, index) => (
             <motion.div
@@ -107,7 +109,6 @@ const DraggableGrid: React.FC<DraggableGridProps> = ({ children, layouts }) => {
           ))}
         </div>
       ) : (
-        // Responsive grid layout for tablet and desktop
         <ResponsiveGridLayout
           className="layout"
           layouts={responsiveLayouts}
@@ -122,7 +123,9 @@ const DraggableGrid: React.FC<DraggableGridProps> = ({ children, layouts }) => {
           useCSSTransforms={true}
           preventCollision={false}
           compactType="vertical"
-          onLayoutChange={(layout, layouts) => onLayoutChange(layout, layouts)}
+          onLayoutChange={(currentLayout: Layout[], layouts: Layouts) => {
+            onLayoutChange(currentLayout, layouts);
+          }}
         >
           {children.map((child, index) => (
             <motion.div

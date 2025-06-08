@@ -11,6 +11,11 @@ declare global {
   var mongoose: MongooseCache | undefined;
 }
 
+declare global {
+  // eslint-disable-next-line no-var
+  var mongoose: MongooseCache | undefined;
+}
+
 const globalWithMongoose = global as { mongoose?: MongooseCache };
 
 if (!globalWithMongoose.mongoose) {
