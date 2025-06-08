@@ -1027,7 +1027,7 @@ export default function QuizTimePage() {
     
     // Mark the lifeline as used
     setLifelines(prev => ({ ...prev, [type]: false }));
-  }, [lifelines, lifeLinesRemaining, answerLocked, username, questions, currentQuestionIndex, setTimerPaused, setQuestions, backgroundMusic]);
+  }, [lifelines, lifeLinesRemaining, username, questions, currentQuestionIndex, setTimerPaused, setQuestions]);
   
   const handleUsernameSubmit = useCallback(async (username: string) => {
     setUsername(username);

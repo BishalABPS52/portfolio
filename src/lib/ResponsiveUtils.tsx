@@ -113,5 +113,5 @@ export function useTouchOptimizer(selector = 'a, button, input, select, textarea
         }
       });
     }
-  }, [selector]);
+  }, [selector, isMobile]);
 }
