@@ -10,14 +10,16 @@ const geist = Geist({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-geist-sans",
-  adjustFontFallback: false // Prevent font fallback adjustments
+  adjustFontFallback: false, // Prevent font fallback adjustments
+  preload: true
 });
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-geist-mono",
-  adjustFontFallback: false // Prevent font fallback adjustments
+  adjustFontFallback: false, // Prevent font fallback adjustments
+  preload: true
 });
 
 export const viewport: Viewport = {
@@ -67,9 +69,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
-      <body className="antialiased">
+  return (    <html lang="en">
+      <body className={`antialiased ${geist.variable} ${geistMono.variable}`}>
         <ThemeProvider>
           {children}
           <Toaster
