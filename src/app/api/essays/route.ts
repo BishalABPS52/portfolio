@@ -8,9 +8,7 @@ export async function GET() {
     const essays = await Essay.find({}).sort({ createdAt: -1 });
     return NextResponse.json(essays);
   } catch (error) {
-    console.error('Database error in essays API:', error);
-    // Return empty array if database is not available
-    return NextResponse.json([]);
+    return NextResponse.json({ error: 'Failed to fetch essays' }, { status: 500 });
   }
 }
 
@@ -21,7 +19,6 @@ export async function POST(request: NextRequest) {
     const essay = await Essay.create(data);
     return NextResponse.json(essay, { status: 201 });
   } catch (error) {
-    console.error('Database error in essays POST:', error);
-    return NextResponse.json({ error: 'Database not available' }, { status: 503 });
+    return NextResponse.json({ error: 'Failed to create essay' }, { status: 500 });
   }
 }

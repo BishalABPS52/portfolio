@@ -52,12 +52,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isServer = typeof window === 'undefined';
-  const geistClass = isServer ? geist.variable : '';
-  const geistMonoClass = isServer ? geistMono.variable : '';
-
   return (
-    <html lang="en" className={`${geistClass} ${geistMonoClass}`}>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
       <body className="antialiased">
         <ThemeProvider>
           {children}

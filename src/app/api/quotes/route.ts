@@ -8,9 +8,7 @@ export async function GET() {
     const quotes = await Quote.find({}).sort({ createdAt: -1 });
     return NextResponse.json(quotes);
   } catch (error) {
-    console.error('Database error in quotes API:', error);
-    // Return empty array if database is not available
-    return NextResponse.json([]);
+    return NextResponse.json({ error: 'Failed to fetch quotes' }, { status: 500 });
   }
 }
 
@@ -21,7 +19,6 @@ export async function POST(request: NextRequest) {
     const quote = await Quote.create(data);
     return NextResponse.json(quote, { status: 201 });
   } catch (error) {
-    console.error('Database error in quotes POST:', error);
-    return NextResponse.json({ error: 'Database not available' }, { status: 503 });
+    return NextResponse.json({ error: 'Failed to create quote' }, { status: 500 });
   }
 }

@@ -8,9 +8,7 @@ export async function GET() {
     const blogs = await Blog.find({}).sort({ createdAt: -1 });
     return NextResponse.json(blogs);
   } catch (error) {
-    console.error('Database error in blogs API:', error);
-    // Return empty array if database is not available
-    return NextResponse.json([]);
+    return NextResponse.json({ error: 'Failed to fetch blogs' }, { status: 500 });
   }
 }
 
@@ -21,7 +19,6 @@ export async function POST(request: NextRequest) {
     const blog = await Blog.create(data);
     return NextResponse.json(blog, { status: 201 });
   } catch (error) {
-    console.error('Database error in blogs POST:', error);
-    return NextResponse.json({ error: 'Database not available' }, { status: 503 });
+    return NextResponse.json({ error: 'Failed to create blog' }, { status: 500 });
   }
 }
