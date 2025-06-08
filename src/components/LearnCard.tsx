@@ -14,7 +14,6 @@ const LearnCard = () => {
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-center gap-2">
-          <BookOpen className="w-6 h-6" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }} />
           <h3 className="text-2xl font-moranga text-black mb-2 text-center">📚 Ongoing Learning</h3>
         </div>
       </div>

@@ -68,44 +68,44 @@ const CreativeCard = () => {
         >
           {item.href ? (
             <Link href={item.href} className="block h-full">
-              <div className="relative h-48 w-full">
+              <div className="relative h-36 sm:h-48 w-full">
                 <Image
                   src={item.imageUrl}
                   alt={item.title}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-30 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
-              <div className="p-4">
-                <h3 className="text-xl font-moranga mb-1" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
+              <div className="p-3 sm:p-4">
+                <h3 className="text-lg sm:text-xl font-moranga mb-1" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
                   {item.title}
                 </h3>
-                <p className="text-sm text-[var(--muted)] mb-2">{item.description}</p>
-                <span className="inline-block px-3 py-1 bg-[var(--foreground)]/10 rounded-full text-xs font-silka-medium text-[var(--foreground)]">
+                <p className="text-xs sm:text-sm text-[var(--muted)] mb-2">{item.description}</p>
+                <span className="inline-block px-2 py-1 sm:px-3 sm:py-1 bg-[var(--foreground)]/10 rounded-full text-xs font-silka-medium text-[var(--foreground)]">
                   {item.category}
                 </span>
               </div>
             </Link>
           ) : (
             <>
-              <div className="relative h-48 w-full">
+              <div className="relative h-36 sm:h-48 w-full">
                 <Image
                   src={item.imageUrl}
                   alt={item.title}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-30 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
-              <div className="p-4">
-                <h3 className="text-xl font-moranga mb-1" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
+              <div className="p-3 sm:p-4">
+                <h3 className="text-lg sm:text-xl font-moranga mb-1" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
                   {item.title}
                 </h3>
-                <p className="text-sm text-[var(--muted)] mb-2">{item.description}</p>
-                <span className="inline-block px-3 py-1 bg-[var(--foreground)]/10 rounded-full text-xs font-silka-medium text-[var(--foreground)]">
+                <p className="text-xs sm:text-sm text-[var(--muted)] mb-2">{item.description}</p>
+                <span className="inline-block px-2 py-1 sm:px-3 sm:py-1 bg-[var(--foreground)]/10 rounded-full text-xs font-silka-medium text-[var(--foreground)]">
                   {item.category}
                 </span>
               </div>

@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { shuffleArray } from '@/lib/utils';
 
 // Font styles for our custom fonts
 const fontStyles = `
@@ -27,6 +28,18 @@ const fontStyles = `
     font-style: normal;
   }
 `;
+
+// Define types for quiz data
+interface QuizQuestion {
+  question: string;
+  correct: string;
+  wrong: string[];
+  options?: string[];
+}
+
+interface QuizData {
+  questions: QuizQuestion[];
+}
 
 // Button component styled like in the original game
 function Button({ text, onClick, isActive = true, type = 'primary', className = '' }: { 
@@ -531,122 +544,101 @@ export default function QuizTimePage() {
     // Load questions from separate JSON files
     const loadQuestions = async () => {
       try {
-        // Fetch questions from each difficulty
+        // Load all JSON files
         const [easyResponse, mediumResponse, hardResponse] = await Promise.all([
-          fetch('/assets/assetsQuiz/easy.json'),
-          fetch('/assets/assetsQuiz/medium.json'),
-          fetch('/assets/assetsQuiz/hard.json')
+          fetch('/assets/assetsQuiz/easy.json').then(async res => {
+            if (!res.ok) throw new Error('Failed to load easy questions');
+            const data = await res.json();
+            return data as QuizData;
+          }),
+          fetch('/assets/assetsQuiz/medium.json').then(async res => {
+            if (!res.ok) throw new Error('Failed to load medium questions');
+            const data = await res.json();
+            return data as QuizData;
+          }),
+          fetch('/assets/assetsQuiz/hard.json').then(async res => {
+            if (!res.ok) throw new Error('Failed to load hard questions');
+            const data = await res.json();
+            return data as QuizData;
+          })
         ]);
-        
-        const easyData = await easyResponse.json();
-        const mediumData = await mediumResponse.json();
-        const hardData = await hardResponse.json();
-        
-        // Get user's previously asked questions from localStorage
+
         const savedAskedData = localStorage.getItem('quizTimeAskedQuestions');
         const askedData = savedAskedData ? JSON.parse(savedAskedData) : { users: {} };
-        
-        // Get user's previously asked questions
         const userAskedQuestions = username && askedData.users[username] 
           ? askedData.users[username] 
           : [];
-        
-        console.log("Previously asked questions for", username, ":", userAskedQuestions.length);
-        
-        // Filter out previously asked questions
-        const filterAskedQuestions = (questions: QuizQuestion[]) => {
-          if (!username || !userAskedQuestions.length) return questions;
-          return questions.filter(q => !userAskedQuestions.includes(q.question));
-        };
-        
-        // Get available questions
-        let availableEasyQuestions = filterAskedQuestions(easyData.questions);
-        let availableMediumQuestions = filterAskedQuestions(mediumData.questions);
-        let availableHardQuestions = filterAskedQuestions(hardData.questions);
-        
-        console.log("Available questions after filtering:", {
-          easy: availableEasyQuestions.length,
-          medium: availableMediumQuestions.length,
-          hard: availableHardQuestions.length
-        });
-        
-        // If we're running out of questions, reset the user's question history
+
+        // Filter and prepare questions
+        let availableEasyQuestions = easyResponse.questions.filter(
+          (q: QuizQuestion) => !userAskedQuestions.includes(q.question)
+        );
+        let availableMediumQuestions = mediumResponse.questions.filter(
+          (q: QuizQuestion) => !userAskedQuestions.includes(q.question)
+        );
+        let availableHardQuestions = hardResponse.questions.filter(
+          (q: QuizQuestion) => !userAskedQuestions.includes(q.question)
+        );
+
+        // If running low on questions, reset for this user
         if (availableEasyQuestions.length < 3 || 
             availableMediumQuestions.length < 5 || 
             availableHardQuestions.length < 7) {
-          console.log("Running out of questions, resetting history for user:", username);
+          console.log("Resetting question history for user:", username);
+          availableEasyQuestions = easyResponse.questions;
+          availableMediumQuestions = mediumResponse.questions;
+          availableHardQuestions = hardResponse.questions;
           if (username) {
             askedData.users[username] = [];
             localStorage.setItem('quizTimeAskedQuestions', JSON.stringify(askedData));
-            
-            // Since we've reset the history, now all questions are available
-            availableEasyQuestions = [...easyData.questions];
-            availableMediumQuestions = [...mediumData.questions];
-            availableHardQuestions = [...hardData.questions];
           }
         }
-        
-        // Shuffle and select questions - 3 easy, 5 medium, 7 hard
+
+        // Select and combine questions
         const selectedEasyQuestions = shuffleArray(availableEasyQuestions).slice(0, 3);
         const selectedMediumQuestions = shuffleArray(availableMediumQuestions).slice(0, 5);
         const selectedHardQuestions = shuffleArray(availableHardQuestions).slice(0, 7);
-        
-        // Combine questions
+
         const allQuestions: QuizQuestion[] = [
           ...selectedEasyQuestions,
           ...selectedMediumQuestions,
           ...selectedHardQuestions
         ];
-        
-        // Mark all selected questions as "asked" immediately
-        if (username) {
-          const questionTexts = allQuestions.map(q => q.question);
-          
-          // Add these questions to the user's asked questions
-          questionTexts.forEach(q => {
-            if (!userAskedQuestions.includes(q)) {
-              userAskedQuestions.push(q);
-            }
-          });
-          
-          // Update localStorage
-          askedData.users[username] = userAskedQuestions;
-          localStorage.setItem('quizTimeAskedQuestions', JSON.stringify(askedData));
-          console.log("Marked all selected questions as asked:", questionTexts.length);
-        }
-        
-        // Add options array to each question and shuffle them
+
+        // Process and shuffle options for each question
         const questionsWithOptions: QuizQuestion[] = allQuestions.map((q) => {
           const wrongOptions = q.wrong.length > 3 
             ? shuffleArray([...q.wrong]).slice(0, 3) 
             : [...q.wrong];
-          const options = [...wrongOptions, q.correct];
-          const shuffledOptions = shuffleArray(options);
-          return { ...q, options: shuffledOptions };
+          const options = shuffleArray([...wrongOptions, q.correct]);
+          return { ...q, options };
         });
-        
+
+        // Mark questions as asked
+        if (username) {
+          const questionTexts = allQuestions.map(q => q.question);
+          askedData.users[username] = [
+            ...userAskedQuestions,
+            ...questionTexts.filter(q => !userAskedQuestions.includes(q))
+          ];
+          localStorage.setItem('quizTimeAskedQuestions', JSON.stringify(askedData));
+        }
+
         setQuestions(questionsWithOptions);
-        console.log("Questions loaded:", questionsWithOptions.length);
+        setTimer(30); // Reset timer
+        setTimerPaused(false);
+        console.log("Questions loaded successfully:", questionsWithOptions.length);
       } catch (error) {
-        console.error("Error processing questions:", error);
+        console.error("Error loading questions:", error);
       }
     };
-    
-    // --- Fix shuffleArray to be generic ---
-    function shuffleArray<T>(array: T[]): T[] {
-      const newArray = [...array];
-      for (let i = newArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-      }
-      return newArray;
-    }
-    
-    // Only load questions if we have a username
-    if (username) {
+
+    if (username && screen === 'quiz') {
       loadQuestions();
     }
+  }, [username, screen]);
 
+  useEffect(() => {
     // Initialize audio
     const music = new Audio('/assets/assetsQuiz/music.wav');
     music.loop = true;
@@ -662,7 +654,7 @@ export default function QuizTimePage() {
         backgroundMusic.currentTime = 0;
       }
     };
-  }, [username, backgroundMusic]);
+  }, []);
 
   // Effect for background music
   useEffect(() => {

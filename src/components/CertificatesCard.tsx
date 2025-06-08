@@ -3,6 +3,7 @@
 import { useTheme } from '@/contexts/ThemeContext';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { getResponsiveImageSizes } from '@/lib/ResponsiveUtils';
 
 const CertificatesCard = () => {
   const { theme } = useTheme();
@@ -17,7 +18,7 @@ const CertificatesCard = () => {
   ];
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
       {certificates.map((cert, index) => (
         <motion.div
           key={cert.src}
@@ -34,10 +35,11 @@ const CertificatesCard = () => {
               fill
               style={{ objectFit: 'cover' }}
               className="hover:scale-105 transition-transform duration-300"
+              sizes={getResponsiveImageSizes('gallery')}
             />
           </div>
-          <div className="p-4">
-            <h3 className="text-lg font-moranga" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
+          <div className="p-3 sm:p-4">
+            <h3 className="text-base sm:text-lg font-moranga truncate" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
               {cert.alt}
             </h3>
           </div>

@@ -12,14 +12,21 @@ interface Project {
   color: string;
 }
 
-const ProjectCard = ({ project }: { project: Project }) => {
-  const getImageSize = (title: string) => {
+const ProjectCard = ({ project }: { project: Project }) => {  const getImageSize = (title: string) => {
     switch (title) {
       case 'Connect 4':
       case 'Quiz Time':
-        return { width: 192, height: 192, containerClass: 'w-32 h-32' };
+        return { 
+          width: 192, 
+          height: 192, 
+          containerClass: 'w-24 h-24 sm:w-32 sm:h-32'
+        };
       default:
-        return { width: 96, height: 96, containerClass: 'w-24 h-24' };
+        return { 
+          width: 96, 
+          height: 96, 
+          containerClass: 'w-20 h-20 sm:w-24 sm:h-24'
+        };
     }
   };
 
@@ -45,13 +52,12 @@ const ProjectCard = ({ project }: { project: Project }) => {
         return 'mb-4'; // Default margin for smaller images
     }
   };
-
   return (
-    <div className={`${project.color} rounded-3xl p-6 h-full relative overflow-hidden grid-item group`}>
+    <div className={`${project.color} rounded-3xl p-4 sm:p-6 h-full relative overflow-hidden grid-item group`}>
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-4 right-4 w-32 h-32 border border-white/20 rounded-full" />
-        <div className="absolute bottom-4 left-4 w-24 h-24 border border-white/20 rounded-full" />
+        <div className="absolute top-4 right-4 w-24 sm:w-32 h-24 sm:h-32 border border-white/20 rounded-full" />
+        <div className="absolute bottom-4 left-4 w-16 sm:w-24 h-16 sm:h-24 border border-white/20 rounded-full" />
       </div>
 
       <div className="relative z-10 h-full flex flex-col">
@@ -65,17 +71,18 @@ const ProjectCard = ({ project }: { project: Project }) => {
               width={getImageSize(project.title).width}
               height={getImageSize(project.title).height}
               className="object-cover rounded-2xl"
+              sizes="(max-width: 640px) 80px, (max-width: 768px) 120px, 160px"
             />
           </div>
 
           {/* Action Links */}
-          <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            {project.githubUrl && (
+          <div className="flex space-x-2 opacity-40 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300">            {project.githubUrl && (
               <a
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors corner-link"
+                className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors corner-link touch-target"
+                aria-label={`GitHub repository for ${project.title}`}
               >
                 <Github size={16} className="text-white" />
               </a>
@@ -85,30 +92,27 @@ const ProjectCard = ({ project }: { project: Project }) => {
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors corner-link"
+                className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors corner-link touch-target"
+                aria-label={`Live demo for ${project.title}`}
               >
                 <ExternalLink size={16} className="text-white" />
               </a>
             )}
           </div>
-        </div>
-
-        {/* Content */}
+        </div>        {/* Content */}
         <div className="flex-1">
-          <h3 className="text-xl font-moranga text-[#003049] mb-3">
+          <h3 className="text-lg sm:text-xl font-moranga text-[#003049] mb-2 sm:mb-3">
             {project.title}
           </h3>
-          <p className="text-[#003049] font-silka text-sm mb-4 leading-relaxed">
+          <p className="text-[#003049] font-silka text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">
             {project.description}
           </p>
-        </div>
-
-        {/* Tech Stack */}
-        <div className="flex flex-wrap gap-2">
+        </div>        {/* Tech Stack */}
+        <div className="flex flex-wrap gap-1 sm:gap-2">
           {project.tech.map((tech) => (
             <span
               key={tech}
-              className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-silka-medium text-white"
+              className="px-2 py-0.5 sm:px-3 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-[10px] sm:text-xs font-silka-medium text-white"
             >
               {tech}
             </span>

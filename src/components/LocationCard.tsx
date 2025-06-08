@@ -14,22 +14,22 @@ const PALETTE = {
 // Enhanced LocationCard with interactivity, animation, and dark mode support
 const LocationCard = () => {
   const [showTooltip, setShowTooltip] = useState(false);
+
   return (
     <motion.div
       whileHover={{ scale: 1.03, boxShadow: `0 8px 32px 0 ${PALETTE.navy}33` }}
-      className="rounded-3xl p-4 h-[calc(100%)] relative overflow-hidden grid-item group"
+      className="rounded-3xl p-3 sm:p-4 h-full relative overflow-hidden grid-item group"
       style={{
         background: `linear-gradient(135deg, ${PALETTE.cream} 60%, ${PALETTE.blue} 100%)`,
         border: `3px solid ${PALETTE.navy}`,
       }}
     >
       {/* Drag Handle */}
-      <div className="drag-handle absolute top-4 right-4 w-6 h-6 cursor-move opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="drag-handle absolute top-4 right-4 w-6 h-6 cursor-move opacity-0 group-hover:opacity-100 transition-opacity z-20">
         <div className="grid grid-cols-2 gap-1">
-          <div className="w-2 h-2" style={{ background: PALETTE.navy, borderRadius: '50%' }}></div>
-          <div className="w-2 h-2" style={{ background: PALETTE.navy, borderRadius: '50%' }}></div>
-          <div className="w-2 h-2" style={{ background: PALETTE.navy, borderRadius: '50%' }}></div>
-          <div className="w-2 h-2" style={{ background: PALETTE.navy, borderRadius: '50%' }}></div>
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="w-2 h-2" style={{ background: PALETTE.navy, borderRadius: '50%' }}></div>
+          ))}
         </div>
       </div>
 
@@ -61,10 +61,10 @@ const LocationCard = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <div style={{ background: PALETTE.cream, color: PALETTE.navy }} className="backdrop-blur-sm rounded-lg px-3 py-1 mb-2 shadow">
-            <span className="text-xs font-silka-medium">KATHMANDU</span>
+            <span className="text-xs sm:text-sm font-silka-medium">KATHMANDU</span>
           </div>
           <div style={{ background: PALETTE.cream, color: PALETTE.navy }} className="backdrop-blur-sm rounded-lg px-3 py-1 shadow">
-            <span className="text-xs font-silka-medium">NEPAL</span>
+            <span className="text-xs sm:text-sm font-silka-medium">NEPAL</span>
           </div>
         </motion.div>
 
@@ -92,64 +92,46 @@ const LocationCard = () => {
             />
             {/* Marker Pin */}
             <motion.div
-              className="w-8 h-8 bg-white rounded-full border-4 flex items-center justify-center"
-              style={{ borderColor: PALETTE.brightRed, zIndex: 1 }}
+              className="w-8 h-8 bg-white rounded-full border-4 flex items-center justify-center relative z-10"
+              style={{ borderColor: PALETTE.brightRed }}
               animate={{ y: [-2, 2, -2] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              onClick={() => setShowTooltip((v) => !v)}
             >
               <div className="w-2 h-2 rounded-full" style={{ background: PALETTE.deepRed }} />
             </motion.div>
-            {/* Avatar (clickable for tooltip) */}
-            <motion.div
-              className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-10"
-              whileHover={{ scale: 1.1 }}
-              onClick={() => setShowTooltip((v) => !v)}
-              style={{ cursor: 'pointer' }}
-            >
-              <div
-                className="w-12 h-12 rounded-full border-4 flex items-center justify-center text-lg shadow-lg"
-                style={{
-                  background: PALETTE.blue,
-                  borderColor: PALETTE.navy,
-                  color: PALETTE.cream,
-                }}
+            {/* Tooltip */}
+            {showTooltip && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="absolute left-1/2 transform -translate-x-1/2 top-12 z-20 whitespace-nowrap"
               >
-                👨‍💻
-              </div>
-              {/* Tooltip */}
-              {showTooltip && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="absolute left-1/2 -bottom-10 transform -translate-x-1/2 bg-white px-3 py-2 rounded shadow-lg text-xs font-semibold"
-                  style={{
-                    background: PALETTE.cream,
-                    color: PALETTE.navy,
-                    border: `1px solid ${PALETTE.navy}`,
-                    zIndex: 20,
-                  }}
+                <div
+                  style={{ background: PALETTE.cream, color: PALETTE.navy, border: `1px solid ${PALETTE.navy}`, zIndex: 20 }}
+                  className="px-3 py-2 rounded-lg shadow-lg text-xs sm:text-sm font-silka-medium"
                 >
                   Kathmandu: City of Temples & Tech!
-                </motion.div>
-              )}
-            </motion.div>
+                </div>
+              </motion.div>
+            )}
           </motion.div>
         </div>
 
         {/* Bottom Info */}
         <motion.div
-          className="absolute bottom-4 left-4"
+          className="absolute bottom-4 left-4 right-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
           <div
             style={{ background: PALETTE.cream, color: PALETTE.navy, border: `1px solid ${PALETTE.navy}` }}
-            className="backdrop-blur-sm rounded-lg px-3 py-2 shadow"
+            className="backdrop-blur-sm rounded-lg px-3 py-2 shadow text-center"
           >
-            <p className="text-sm font-silka-medium">📍 Based in Kathmandu</p>
-            <p className="text-xs" style={{ color: PALETTE.brightRed }}>Available for remote work</p>
+            <p className="text-xs sm:text-sm font-silka-medium mb-1">📍 Based in Kathmandu</p>
+            <p className="text-[10px] sm:text-xs" style={{ color: PALETTE.brightRed }}>Available for remote work</p>
           </div>
         </motion.div>
       </div>

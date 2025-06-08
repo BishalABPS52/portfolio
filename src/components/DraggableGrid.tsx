@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
-import RGL, { WidthProvider, type Layout } from 'react-grid-layout';
+import RGL, { Responsive, WidthProvider, type Layout } from 'react-grid-layout';
 import { motion } from 'framer-motion';
 import 'react-grid-layout/css/styles.css';
 import '../app/resizable.css';
+import { useScreenSize } from '@/lib/ResponsiveUtils';
 
 const ReactGridLayout = WidthProvider(RGL);
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
 interface GridItem {
   i: string;
@@ -24,26 +26,58 @@ interface DraggableGridProps {
 }
 
 const DraggableGrid: React.FC<DraggableGridProps> = ({ children, layouts }) => {
+  const { isMobile } = useScreenSize();
+  const defaultLayout = [
+    { i: '0', x: 0, y: 0, w: 2, h: 1 },
+    { i: '1', x: 2, y: 0, w: 1, h: 1 },
+    { i: '2', x: 3, y: 0, w: 1, h: 2 },
+    { i: '3', x: 0, y: 1, w: 1, h: 1 },
+    { i: '4', x: 1, y: 1, w: 1, h: 1 },
+    { i: '5', x: 2, y: 1, w: 1, h: 1 },
+    { i: '6', x: 0, y: 2, w: 1, h: 1 },
+    { i: '7', x: 1, y: 2, w: 1, h: 1 },
+    { i: '8', x: 2, y: 2, w: 1, h: 1 },
+  ];
+
+  // Create layouts for different breakpoints
+  const [responsiveLayouts, setResponsiveLayouts] = useState({
+    lg: layouts || defaultLayout,
+    md: layouts || defaultLayout.map(item => ({ ...item, w: Math.min(item.w, 3) })),
+    sm: layouts || defaultLayout.map(item => ({ ...item, w: Math.min(item.w, 2), x: Math.min(item.x, 1) })),
+    xs: layouts || defaultLayout.map(item => ({ ...item, w: 1, x: 0 })),
+  });
+
   const [currentLayouts, setCurrentLayouts] = useState<Layout[]>(
-    layouts || [
-      { i: '0', x: 0, y: 0, w: 2, h: 1 },
-      { i: '1', x: 2, y: 0, w: 1, h: 1 },
-      { i: '2', x: 3, y: 0, w: 1, h: 2 },
-      { i: '3', x: 0, y: 1, w: 1, h: 1 },
-      { i: '4', x: 1, y: 1, w: 1, h: 1 },
-      { i: '5', x: 2, y: 1, w: 1, h: 1 },
-      { i: '6', x: 0, y: 2, w: 1, h: 1 },
-      { i: '7', x: 1, y: 2, w: 1, h: 1 },
-      { i: '8', x: 2, y: 2, w: 1, h: 1 },
-    ]
+    layouts || defaultLayout
   );
 
-  const onLayoutChange = useCallback((layout: Layout[]) => {
+  const onLayoutChange = useCallback((layout: Layout[], allLayouts?: any) => {
     setCurrentLayouts(layout);
-    localStorage.setItem('portfolio-layout', JSON.stringify(layout));
+    
+    if (allLayouts) {
+      // Save all responsive layouts
+      localStorage.setItem('portfolio-layouts', JSON.stringify(allLayouts));
+      setResponsiveLayouts(allLayouts);
+    } else {
+      // Only update current layout
+      localStorage.setItem('portfolio-layout', JSON.stringify(layout));
+    }
   }, []);
 
   useEffect(() => {
+    // Try to load responsive layouts first
+    const savedResponsiveLayouts = localStorage.getItem('portfolio-layouts');
+    if (savedResponsiveLayouts) {
+      try {
+        const parsedLayouts = JSON.parse(savedResponsiveLayouts);
+        setResponsiveLayouts(parsedLayouts);
+        return; // Skip loading single layout if responsive layouts exist
+      } catch (error) {
+        console.warn('Failed to parse saved responsive layouts:', error);
+      }
+    }
+    
+    // Fallback to old layout format
     const savedLayout = localStorage.getItem('portfolio-layout');
     if (savedLayout) {
       try {
@@ -57,34 +91,56 @@ const DraggableGrid: React.FC<DraggableGridProps> = ({ children, layouts }) => {
 
   return (
     <div className="w-full">
-      <ReactGridLayout
-        className="layout"
-        layout={currentLayouts}
-        onLayoutChange={onLayoutChange}
-        cols={4}
-        rowHeight={280}
-        width={1200}
-        margin={[10, 10]} // Set margin between grid items to 10px
-        containerPadding={[10, 10]} // Add padding around the grid container
-        isDraggable={true}
-        isResizable={true}
-        draggableHandle=".drag-handle"
-        useCSSTransforms={true}
-        preventCollision={false}
-        compactType="vertical"
-      >
-        {children.map((child, index) => (
-          <motion.div
-            key={index.toString()}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-            className="grid-item"
-          >
-            {child}
-          </motion.div>
-        ))}
-      </ReactGridLayout>
+      {isMobile ? (
+        // Simple stacked layout for mobile
+        <div className="flex flex-col space-y-4">
+          {children.map((child, index) => (
+            <motion.div
+              key={index.toString()}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              className="bg-transparent relative rounded-3xl overflow-hidden"
+            >
+              {child}
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        // Responsive grid layout for tablet and desktop
+        <ResponsiveGridLayout
+          className="layout"
+          layouts={responsiveLayouts}
+          breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480 }}
+          cols={{ lg: 4, md: 3, sm: 2, xs: 1 }}
+          rowHeight={280}
+          margin={[10, 10]}
+          containerPadding={[10, 10]}
+          isDraggable={true}
+          isResizable={true}
+          draggableHandle=".drag-handle"
+          useCSSTransforms={true}
+          preventCollision={false}
+          compactType="vertical"
+          onLayoutChange={(layout, layouts) => onLayoutChange(layout, layouts)}
+        >
+          {children.map((child, index) => (
+            <motion.div
+              key={index.toString()}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              className="bg-transparent relative rounded-3xl overflow-hidden grid-item"
+            >
+              <div className="absolute top-0 right-0 m-4 drag-handle cursor-move w-8 h-8 rounded-full bg-[var(--foreground)]/20 backdrop-blur-sm flex items-center justify-center opacity-30 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 touch-target">
+                <span className="w-4 h-0.5 bg-[var(--foreground)]/80 absolute"></span>
+                <span className="h-4 w-0.5 bg-[var(--foreground)]/80 absolute"></span>
+              </div>
+              {child}
+            </motion.div>
+          ))}
+        </ResponsiveGridLayout>
+      )}
     </div>
   );
 };

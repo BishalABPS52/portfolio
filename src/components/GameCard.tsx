@@ -29,12 +29,14 @@ const GameCard = ({ game }: { game: Game }) => {
     >
       <div className="relative z-10">
         {/* Game Image */}
-        <div className="w-full h-48 mb-4 relative rounded-2xl overflow-hidden">
+        <div className="w-full h-36 sm:h-48 mb-4 relative rounded-2xl overflow-hidden">
           <Image
             src={game.imageUrl}
             alt={game.title}
             fill
             className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+            priority={false}
           />
           {!isAvailable && (
             <div className="absolute inset-0 bg-[var(--background)]/80 flex items-center justify-center">
@@ -65,7 +67,7 @@ const GameCard = ({ game }: { game: Game }) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             {game.githubUrl && (
               <motion.a
                 href={game.githubUrl}
@@ -73,7 +75,7 @@ const GameCard = ({ game }: { game: Game }) => {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex-1 py-3 mt-4 rounded-full font-silka-medium text-sm flex items-center justify-center gap-2 bg-[var(--foreground)]/10 text-[var(--foreground)] hover:bg-[var(--foreground)]/20"
+                className="flex-1 py-3 mt-2 sm:mt-4 rounded-full font-silka-medium text-sm flex items-center justify-center gap-2 bg-[var(--foreground)]/10 text-[var(--foreground)] hover:bg-[var(--foreground)]/20 touch-target"
               >
                 View Source
               </motion.a>
@@ -83,7 +85,7 @@ const GameCard = ({ game }: { game: Game }) => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex-1 py-3 mt-4 rounded-full font-silka-medium text-sm flex items-center justify-center gap-2 bg-[var(--foreground)] text-[var(--background)] hover:opacity-90"
+                  className="flex-1 py-3 mt-2 sm:mt-4 rounded-full font-silka-medium text-sm flex items-center justify-center gap-2 bg-[var(--foreground)] text-[var(--background)] hover:opacity-90 touch-target"
                 >
                   <PlayCircle size={18} />
                   Play Now
@@ -93,7 +95,7 @@ const GameCard = ({ game }: { game: Game }) => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex-1 py-3 mt-4 rounded-full font-silka-medium text-sm flex items-center justify-center gap-2 bg-[var(--foreground)]/20 text-[var(--muted)] cursor-not-allowed"
+                className="flex-1 py-3 mt-2 sm:mt-4 rounded-full font-silka-medium text-sm flex items-center justify-center gap-2 bg-[var(--foreground)]/20 text-[var(--muted)] cursor-not-allowed touch-target"
                 disabled
               >
                 <PlayCircle size={18} />
