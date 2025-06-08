@@ -639,34 +639,42 @@ export default function QuizTimePage() {
   }, [username, screen]);
 
   useEffect(() => {
-    // Initialize audio
+    // Initialize audio only once when component mounts
     const music = new Audio('/assets/assetsQuiz/music.wav');
     music.loop = true;
     music.volume = 0.5;
+    music.preload = 'auto';
     setBackgroundMusic(music);
 
     correctSoundRef.current = new Audio('/assets/assetsQuiz/correct.wav');
     wrongSoundRef.current = new Audio('/assets/assetsQuiz/wrong.mp3');
 
     return () => {
-      if (backgroundMusic) {
-        backgroundMusic.pause();
-        backgroundMusic.currentTime = 0;
-      }
+      music.pause();
+      music.currentTime = 0;
     };
-  }, []);
+  }, []); // Empty dependency array to run only once
 
   // Effect for background music
   useEffect(() => {
-    if (screen === 'quiz' && backgroundMusic) {
-      backgroundMusic.play().catch(e => console.log('Audio play failed:', e));
-    } else if (backgroundMusic) {
-      backgroundMusic.pause();
-      if (screen === 'end') {
-        backgroundMusic.currentTime = 0;
+    const playMusic = async () => {
+      if (screen === 'quiz' && backgroundMusic) {
+        try {
+          // Create and play music only when entering quiz screen
+          await backgroundMusic.play();
+        } catch (e) {
+          console.log('Audio play failed:', e);
+        }
+      } else if (backgroundMusic) {
+        backgroundMusic.pause();
+        if (screen === 'end') {
+          backgroundMusic.currentTime = 0;
+        }
       }
-    }
-  }, [screen]);
+    };
+
+    playMusic();
+  }, [screen, backgroundMusic]); // Add backgroundMusic as dependency
 
   // Load game stats from localStorage on component mount
   useEffect(() => {
@@ -687,12 +695,13 @@ export default function QuizTimePage() {
   
   // Timer effect
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
+    let interval: NodeJS.Timeout | undefined;
 
-    if (screen === 'quiz' && !timerPaused && timer > 0 && !answerLocked) {
+    if (screen === 'quiz' && !timerPaused && timer > 0 && !answerLocked && questions.length > 0) {
       interval = setInterval(() => {
-        setTimer(prev => {
-          if (prev <= 1) {
+        setTimer(prevTimer => {
+          const newTime = prevTimer - 1;
+          if (newTime <= 0) {
             if (wrongSoundRef.current) {
               wrongSoundRef.current.play().catch(e => console.log('Audio play failed:', e));
             }
@@ -703,34 +712,36 @@ export default function QuizTimePage() {
             }
             return 0;
           }
-          return prev - 1;
+          return newTime;
         });
       }, 1000);
     }
 
     return () => {
-      if (interval) clearInterval(interval);
+      if (interval) {
+        clearInterval(interval);
+      }
     };
-  }, [screen, timerPaused, timer, answerLocked, backgroundMusic]);
+  }, [screen, timerPaused, answerLocked, backgroundMusic, wrongSoundRef, setScreen, questions.length, timer]);
   
-  // Reset timer when moving to a new question
+  // Reset timer when moving to a new question or starting quiz
   useEffect(() => {
-    if (screen === 'quiz') {
+    if (screen === 'quiz' && questions.length > 0) {
       setTimer(30);
       setTimerPaused(false);
     }
-  }, [currentQuestionIndex, screen]);
+  }, [currentQuestionIndex, screen, questions.length]);
   
   const startQuiz = () => {
-    setScreen('quiz');
     setCurrentQuestionIndex(0);
     setScore(0);
-    setTimer(30);
     setTimerPaused(false);
     setDoubleChanceActive(false);
     setAnswerLocked(false);
     setSelectedAnswer(null);
     setAnswerStatus('waiting');
+    setTimer(30);
+    setScreen('quiz'); // Set screen last to ensure all states are ready
     setLifeLinesRemaining(2); // Reset to 2 lifelines per game
     setLifelines({
       fiftyFifty: true,
@@ -877,9 +888,11 @@ export default function QuizTimePage() {
       case 'pauseTimer':
         // Pause the timer for 15 seconds
         setTimerPaused(true);
-        setTimeout(() => {
+        const pauseTimeout = setTimeout(() => {
           setTimerPaused(false);
         }, 15000);
+        // Clean up timeout if component unmounts or screen changes
+        return () => clearTimeout(pauseTimeout);
         break;
         
       case 'changeQuestion':

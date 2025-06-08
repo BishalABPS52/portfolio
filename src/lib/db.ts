@@ -8,12 +8,7 @@ interface MongooseCache {
 }
 
 declare global {
-  var mongoose: MongooseCache | undefined;
-}
-
-declare global {
-  // eslint-disable-next-line no-var
-  var mongoose: MongooseCache | undefined;
+  let mongoose: MongooseCache | undefined;
 }
 
 const globalWithMongoose = global as { mongoose?: MongooseCache };
