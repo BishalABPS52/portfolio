@@ -33,7 +33,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Bishal Shrestha - Developer & Designer",
   description:
-    "Versatile developer and product designer from Nepal. Specializing in React, Node.js, Game Testing, Python, Web Development, and Teaching Programming.",
+    "Developer",
   icons: {
     icon: '/favicon.ico',
   },
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   creator: "Bishal Shrestha",
   openGraph: {
     title: "Bishal Shrestha - Developer & Designer",
-    description: "Versatile developer and product designer from Nepal",
+    description: "Developer",
     url: "https://bishal.dev",
     siteName: "Bishal Shrestha Portfolio",
     type: "website",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Bishal Shrestha - Developer & Designer",
-    description: "Versatile developer and product designer from Nepal",
+    description: "Developer",
     creator: "@BishalABPS52",
   },
 };
