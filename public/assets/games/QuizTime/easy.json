@@ -1,0 +1,19 @@
+{
+  "questions": [
+    {
+      "question": "What is the capital of France?",
+      "correct": "Paris",
+      "wrong": ["London", "Berlin", "Madrid"]
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "correct": "Mercury",
+      "wrong": ["Venus", "Earth", "Mars"]
+    },
+    {
+      "question": "What is 2 + 2?",
+      "correct": "4",
+      "wrong": ["3", "5", "6"]
+    }
+  ]
+}

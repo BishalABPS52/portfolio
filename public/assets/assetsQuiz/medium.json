@@ -1,0 +1,79 @@
+{
+  "questions": [
+    {
+      "question": "San Siro is a stadium located in which city?",
+      "correct": "Milan",
+      "wrong": ["Rome", "Paris", "Madrid", "Berlin"]
+    },
+    {
+      "question": "In which city would you find the historic landmark, the Alhambra?",
+      "correct": "Granada",
+      "wrong": ["Seville", "Madrid", "Barcelona", "Lisbon"]
+    },
+    {
+      "question": "Which city is known as the 'City of Canals'?",
+      "correct": "Venice",
+      "wrong": ["Amsterdam", "Paris", "Bangkok", "Brussels"]
+    },
+    {
+      "question": "In which city is the famous landmark, the Christ the Redeemer statue, located?",
+      "correct": "Rio de Janeiro",
+      "wrong": ["Sao Paulo", "Buenos Aires", "Mexico City", "Lima"]
+    },
+    {
+      "question": "Which city is home to the historic landmark, the Colosseum?",
+      "correct": "Rome",
+      "wrong": ["Athens", "Paris", "London", "New York"]
+    },
+    {
+      "question": "What is the SI unit of electric current?",
+      "correct": "Ampere",
+      "wrong": ["Volt", "Watt", "Ohm", "Joule"]
+    },
+    {
+      "question": "Who is known as the father of modern physics?",
+      "correct": "Albert Einstein",
+      "wrong": ["Isaac Newton", "Niels Bohr", "Galileo Galilei", "Max Planck"]
+    },
+    {
+      "question": "Which element has the highest melting point?",
+      "correct": "Tungsten",
+      "wrong": ["Carbon", "Platinum", "Titanium", "Uranium"]
+    },
+    {
+      "question": "What is the chemical symbol for gold?",
+      "correct": "Au",
+      "wrong": ["Ag", "Fe", "Cu", "Pt"]
+    },
+    {
+      "question": "Who wrote 'To Kill a Mockingbird'?",
+      "correct": "Harper Lee",
+      "wrong": ["J.D. Salinger", "Ernest Hemingway", "F. Scott Fitzgerald", "Mark Twain"]
+    },
+    {
+      "question": "Which planet has the most moons?",
+      "correct": "Saturn",
+      "wrong": ["Jupiter", "Neptune", "Uranus", "Mars"]
+    },
+    {
+      "question": "In which year did World War I begin?",
+      "correct": "1914",
+      "wrong": ["1916", "1918", "1912", "1910"]
+    },
+    {
+      "question": "What is the chemical formula for water?",
+      "correct": "H2O",
+      "wrong": ["CO2", "O2", "NaCl", "CH4"]
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "correct": "Leonardo da Vinci",
+      "wrong": ["Michelangelo", "Pablo Picasso", "Vincent van Gogh", "Claude Monet"]
+    },
+    {
+      "question": "Which country is the largest producer of coffee in the world?",
+      "correct": "Brazil",
+      "wrong": ["Colombia", "Vietnam", "Ethiopia", "India"]
+    }
+  ]
+}

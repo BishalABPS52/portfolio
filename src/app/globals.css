@@ -1,0 +1,270 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Fonts */
+@font-face {
+  font-family: 'Moranga Bold';
+  src: url('https://ext.same-assets.com/165406753/1526249091.woff') format('woff');
+  font-weight: bold;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Silka Regular';
+  src: url('https://ext.same-assets.com/165406753/2453709437.woff') format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Silka Medium';
+  src: url('https://ext.same-assets.com/165406753/3619841182.woff') format('woff');
+  font-weight: 500;
+  font-display: swap;
+}
+
+/* Nepali Font */
+@font-face {
+  font-family: 'Preeti';
+  src: url('https://fonts.gstatic.com/s/notosansdevanagari/v23/TuGOUUNzXI-TuWvNcajErH-qUkP-WwmYn.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
+}
+
+/* Base Variables */
+:root {
+  --background: #f7f7f5;
+  --foreground: #0D1117;
+  --muted: #8A949E;
+  --card-background: #ffffff;
+  --accent-green: #69cdb5;
+  --accent-blue: #9ac9f1;
+  --accent-yellow: #f9e0a3;
+  --accent-pink: #fdf0d5;
+  --accent-purple: #780000;
+  --border: #e5e7eb;
+}
+
+/* Dark Mode Variables */
+.dark {
+  --background: #0D1117;
+  --foreground: #ffffff;
+  --muted: #8A949E;
+  --card-background: #1c2128;
+  --accent-green: #69cdb5;
+  --accent-blue: #9ac9f1;
+  --accent-yellow: #f9e0a3;
+  --accent-pink:#fdf0d5;
+  --accent-purple: #c1121f;
+  --border: #30363d;
+}
+
+body {
+  font-family: 'Silka Regular', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  margin: 0;
+  padding: 0;
+}
+
+.font-moranga {
+  font-family: 'Moranga Bold', sans-serif;
+}
+
+.font-silka {
+  font-family: 'Silka Regular', sans-serif;
+}
+
+.font-silka-medium {
+  font-family: 'Silka Medium', sans-serif;
+}
+
+.font-nepali {
+  font-family: 'Preeti', 'Noto Sans Devanagari', sans-serif;
+  line-height: 1.8;
+}
+
+.mixed-language {
+  font-family: 'Silka Regular', 'Preeti', 'Noto Sans Devanagari', sans-serif;
+  line-height: 1.6;
+}
+
+/* Grid animations and layout */
+.grid-item {
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.grid-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* React Grid Layout Overrides */
+.react-grid-layout {
+  position: relative;
+}
+
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform;
+}
+
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  background: url('data:image/svg+xml;utf8,<svg width="6" height="6" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"><g fill="%23999"><polygon points="6,6 0,6 6,0"/></g></svg>') no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  cursor: se-resize;
+}
+
+.react-grid-item.react-grid-placeholder {
+  background: var(--accent-green);
+  opacity: 0.2;
+  transition-duration: 100ms;
+  z-index: 2;
+  user-select: none;
+  border-radius: 1.5rem;
+}
+
+/* Playing indicator animation */
+@keyframes playing {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+
+.playing-bar {
+  animation: playing 1s infinite ease-in-out;
+}
+
+/* Corner link hover effects */
+.corner-link {
+  transition: all 0.3s ease;
+}
+
+.corner-link:hover {
+  transform: scale(1.1);
+}
+
+/* React Grid Layout Overrides */
+.react-grid-layout {
+  position: relative;
+}
+
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top;
+  border: 1px solid transparent;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform;
+}
+
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  background: var(--muted);
+  padding: 0 3px 3px 0;
+  border-radius: 3px;
+  cursor: se-resize;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.react-grid-item:hover > .react-resizable-handle {
+  opacity: 0.5;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid var(--foreground);
+  border-bottom: 2px solid var(--foreground);
+}
+
+.react-grid-placeholder {
+  background: var(--accent-green);
+  opacity: 0.2;
+  transition-duration: 100ms;
+  z-index: 2;
+  border-radius: 24px;
+}
+
+/* Line clamp utility */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.grid-item h3, .card-heading {
+  color: #780000;
+}
+
+/* Custom: Subheadings and project content color */
+.card-subheading-color, .card-subheading-color h2, .card-subheading-color h3, .card-subheading-color h4, .github-section-title, .github-project-content, .freelance-availability {
+  color: #003049 !important;
+}
+
+/* Dark mode: Card heading and subheading overrides */
+.dark .grid-item h3, .dark .card-heading {
+  color: #c1121f !important;
+}
+.dark .card-subheading-color, .dark .card-subheading-color h2, .dark .card-subheading-color h3, .dark .card-subheading-color h4, .dark .github-section-title, .dark .github-project-content, .dark .freelance-availability {
+  color: #fdf0d5 !important;
+}
+
+/* Admin Login Animations */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Backdrop blur support for older browsers */
+@supports not (backdrop-filter: blur(20px)) {
+  .backdrop-blur-md {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+}

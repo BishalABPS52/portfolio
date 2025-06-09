@@ -1,0 +1,79 @@
+{
+  "questions": [
+    {
+      "question": "What is the rarest blood type?",
+      "correct": "AB-",
+      "wrong": ["O-", "B-", "A-", "AB+"]
+    },
+    {
+      "question": "Who composed the opera 'The Magic Flute'?",
+      "correct": "Wolfgang Amadeus Mozart",
+      "wrong": ["Ludwig van Beethoven", "Johann Sebastian Bach", "Richard Wagner", "Giuseppe Verdi"]
+    },
+    {
+      "question": "Which element has the atomic number 79?",
+      "correct": "Gold",
+      "wrong": ["Silver", "Platinum", "Mercury", "Lead"]
+    },
+    {
+      "question": "In which year was the first human heart transplant performed?",
+      "correct": "1967",
+      "wrong": ["1954", "1972", "1981", "1995"]
+    },
+    {
+      "question": "What is the hardest substance naturally found on Earth?",
+      "correct": "Diamond",
+      "wrong": ["Graphene", "Steel", "Platinum", "Titanium"]
+    },
+    {
+      "question": "Who discovered penicillin?",
+      "correct": "Alexander Fleming",
+      "wrong": ["Louis Pasteur", "Marie Curie", "Robert Koch", "Jonas Salk"]
+    },
+    {
+      "question": "What is the world's deepest oceanic trench?",
+      "correct": "Mariana Trench",
+      "wrong": ["Puerto Rico Trench", "Java Trench", "Challenger Deep", "Tonga Trench"]
+    },
+    {
+      "question": "Which programming language was created by Guido van Rossum?",
+      "correct": "Python",
+      "wrong": ["Java", "C++", "Ruby", "JavaScript"]
+    },
+    {
+      "question": "What is the capital of Kazakhstan?",
+      "correct": "Astana",
+      "wrong": ["Almaty", "Bishkek", "Tashkent", "Dushanbe"]
+    },
+    {
+      "question": "Which book is often called the first modern novel?",
+      "correct": "Don Quixote",
+      "wrong": ["Pride and Prejudice", "Robinson Crusoe", "Gulliver's Travels", "Madame Bovary"]
+    },
+    {
+      "question": "Who was the first woman to win a Nobel Prize?",
+      "correct": "Marie Curie",
+      "wrong": ["Rosalind Franklin", "Dorothy Hodgkin", "Ada Lovelace", "Jane Goodall"]
+    },
+    {
+      "question": "What is the smallest particle of an element that can exist?",
+      "correct": "Atom",
+      "wrong": ["Electron", "Proton", "Neutron", "Quark"]
+    },
+    {
+      "question": "Which mountain is the tallest in the Americas?",
+      "correct": "Aconcagua",
+      "wrong": ["Denali", "Mount Whitney", "Pico de Orizaba", "Mount Logan"]
+    },
+    {
+      "question": "What is the main ingredient in guacamole?",
+      "correct": "Avocado",
+      "wrong": ["Tomato", "Lime", "Cilantro", "Onion"]
+    },
+    {
+      "question": "Who painted 'Starry Night'?",
+      "correct": "Vincent van Gogh",
+      "wrong": ["Claude Monet", "Pablo Picasso", "Salvador Dali", "Leonardo da Vinci"]
+    }
+  ]
+}
