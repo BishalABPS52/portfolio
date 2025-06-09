@@ -1,7 +1,15 @@
 {
-  "name": "nextjs-shadcn",
-  "version": "0.1.0",
-  "private": true,  "scripts": {
+  "name": "bishal-portfolio",
+  "version": "1.0.0",
+  "description": "Bishal's Portfolio Website with Admin Panel and Quiz Game",
+  "private": true,
+  "homepage": "https://github.com/BishalABPS52/portfolio",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BishalABPS52/portfolio.git"
+  },
+  "author": "Bishal Shrestha",
+  "scripts": {
     "dev": "next dev -H 0.0.0.0 --turbopack",
     "build": "next build",
     "start": "next start",
