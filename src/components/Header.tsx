@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 const Header = () => {
   const [activeFilter, setActiveFilter] = useState('Home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showAdminAccess, setShowAdminAccess] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const router = useRouter();
   const filters = ['Home', 'About', 'Projects', 'Skills', 'PlayZone', 'Creative', 'CV', 'Certificates', 'Blogs'];
@@ -19,6 +20,19 @@ const Header = () => {
     window.dispatchEvent(event);
     setMobileMenuOpen(false); // Close mobile menu after selection
   };
+
+  // Toggle admin access visibility with Ctrl+Shift+A
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        setShowAdminAccess(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
   
   // Close menu when window is resized to desktop size
   useEffect(() => {
@@ -82,6 +96,22 @@ const Header = () => {
             {filter}
           </motion.button>
         ))}
+        
+        {/* Admin Panel Link for Desktop - Hidden by default, shown with Ctrl+Shift+A */}
+        {showAdminAccess && (
+          <motion.button
+            onClick={() => router.push('/admin/availability')}
+            className="px-4 py-2 rounded-full font-silka-medium text-sm bg-red-500/20 text-red-500 border border-red-500/30 transition-all duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+          >
+            🔐 Admin
+          </motion.button>
+        )}
+        
         {/* Dark Mode Toggle */}
         <motion.button
           onClick={toggleTheme}
@@ -129,6 +159,22 @@ const Header = () => {
                   {filter}
                 </motion.button>
               ))}
+              {/* Admin Panel Link - Hidden by default, shown with Ctrl+Shift+A */}
+              {showAdminAccess && (
+                <motion.button
+                  onClick={() => {
+                    router.push('/admin/availability');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="px-4 py-3 rounded-full font-silka-medium text-base bg-red-500/20 text-red-500 border border-red-500/30 transition-all duration-300"
+                  whileTap={{ scale: 0.98 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                >
+                  🔐 Admin Panel
+                </motion.button>
+              )}
             </div>
             
             {/* Mobile Contact Button */}

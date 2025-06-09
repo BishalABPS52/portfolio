@@ -26,4 +26,5 @@ const designSchema = new mongoose.Schema({
   },
 });
 
-export const Design = mongoose.models.Design || mongoose.model('Design', designSchema);
+const Design = mongoose.models.Design || mongoose.model('Design', designSchema);
+export default Design;

@@ -1,13 +1,47 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useScreenSize } from '@/lib/ResponsiveUtils';
 
+interface AvailabilityStatus {
+  isAvailable: boolean;
+  statusMessage: string;
+  lastUpdated: string;
+}
+
 const BioCard = () => {
-  const [isOnline, setIsOnline] = useState(true);
+  const [availabilityStatus, setAvailabilityStatus] = useState<AvailabilityStatus>({
+    isAvailable: true,
+    statusMessage: 'Available for Work',
+    lastUpdated: new Date().toISOString()
+  });
+  const [loading, setLoading] = useState(true);
   const { isMobile } = useScreenSize();
+
+  useEffect(() => {
+    fetchAvailabilityStatus();
+    // Set up polling to refresh status every 30 seconds
+    const interval = setInterval(fetchAvailabilityStatus, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchAvailabilityStatus = async () => {
+    try {
+      const response = await fetch('/api/availability');
+      const data = await response.json();
+      
+      if (data.success) {
+        setAvailabilityStatus(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching availability status:', error);
+      // Keep default status if API fails
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-[var(--card-background)] rounded-3xl p-3 sm:p-4 h-[calc(100%)] relative overflow-hidden grid-item border-[3px] border-[#003049] transition-colors duration-300">
@@ -21,16 +55,15 @@ const BioCard = () => {
         </div>
       </div>
 
-      {/* Avatar Section */}
-      <div className="relative mb-4 sm:mb-6 flex justify-center sm:justify-start">
+      {/* Avatar Section */}      <div className="relative mb-4 sm:mb-6 flex justify-center sm:justify-start">
         <div className="relative inline-block">
           {/* Pulse Animation */}
           <motion.div
-            className={`absolute inset-0 rounded-full ${isOnline ? 'bg-[var(--accent-green)]' : 'bg-[var(--muted)]'} opacity-30`}
+            className={`absolute inset-0 rounded-full ${availabilityStatus.isAvailable ? 'bg-[var(--accent-green)]' : 'bg-[var(--muted)]'} opacity-30`}
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
           />
-          <div className={`absolute inset-0 rounded-full ${isOnline ? 'bg-[var(--accent-green)]' : 'bg-[var(--muted)]'} opacity-20`} />
+          <div className={`absolute inset-0 rounded-full ${availabilityStatus.isAvailable ? 'bg-[var(--accent-green)]' : 'bg-[var(--muted)]'} opacity-20`} />
 
           {/* Profile Image */}
           <motion.div
@@ -65,25 +98,27 @@ const BioCard = () => {
           </span>
           , a Computer Engineering student from Nepal and a passionate software engineering enthusiast skilled in React, Node.js, Python, and C++, building real-world tech solutions.
         </motion.p>
-      </div>
-
-      {/* Interactive Status Toggle Button */}
+      </div>      {/* Status Display Button (Read-only) */}
       <div className="flex justify-center sm:justify-start">
-        <motion.button
-          onClick={() => setIsOnline(!isOnline)}
-          className={`px-3 py-2 sm:px-4 sm:py-2 rounded-full font-silka-medium text-xs sm:text-sm transition-all duration-300 shadow-lg touch-target ${
-            isOnline
-              ? 'bg-[var(--accent-green)] text-white hover:opacity-80'
-              : 'bg-[var(--muted)] text-white hover:opacity-80'
+        <motion.div
+          className={`px-3 py-2 sm:px-4 sm:py-2 rounded-full font-silka-medium text-xs sm:text-sm transition-all duration-300 shadow-lg ${
+            loading
+              ? 'bg-[var(--muted)] text-white'
+              : availabilityStatus.isAvailable
+              ? 'bg-[var(--accent-green)] text-white'
+              : 'bg-[var(--muted)] text-white'
           }`}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          {isOnline ? '🟢 Available for Work' : '🔴 Currently Busy'}
-        </motion.button>
+          {loading 
+            ? '⏳ Loading...' 
+            : availabilityStatus.isAvailable 
+            ? '🟢 Available for Work' 
+            : `🔴 ${availabilityStatus.statusMessage}`
+          }
+        </motion.div>
       </div>
     </div>
   );

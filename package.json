@@ -1,13 +1,22 @@
 {
-  "name": "nextjs-shadcn",
-  "version": "0.1.0",
+  "name": "bishal-portfolio",
+  "version": "1.0.0",
+  "description": "Bishal's Portfolio Website with Admin Panel and Quiz Game",
   "private": true,
+  "homepage": "https://github.com/BishalABPS52/portfolio",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BishalABPS52/portfolio.git"
+  },
+  "author": "Bishal Shrestha",
   "scripts": {
     "dev": "next dev -H 0.0.0.0 --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "bunx biome lint --write && bunx tsc --noEmit",
-    "format": "bunx biome format --write"
+    "format": "bunx biome format --write",
+    "db:setup": "node scripts/setup-mongodb.js",
+    "db:test": "node scripts/test-db-connection.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

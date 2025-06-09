@@ -261,21 +261,60 @@ function GameWindow({
 
 // High Scores component
 function HighScores({ onBack }: { onBack: () => void }) {
-  const [highScores, setHighScores] = useState<{name: string; score: number}[]>([
-    { name: "Player 1", score: 10000000 },
-    { name: "Player 2", score: 5000000 },
-    { name: "Player 3", score: 1000000 },
-  ]);
+  const [highScores, setHighScores] = useState<{name: string; score: number; questionsAnswered?: number; gameCompletedAt?: string}[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Load high scores from localStorage on component mount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    fetchHighScores();
+  }, []);
+
+  const fetchHighScores = async () => {
+    setLoading(true);
+    setError('');
+    
+    try {
+      const response = await fetch('/api/highscores');
+      const data = await response.json();
+      
+      if (data.success) {
+        // Transform backend data to match component expectations
+        const transformedScores = data.data.map((item: {
+          username: string;
+          score: number;
+          questionsAnswered: number;
+          gameCompletedAt: string;
+        }) => ({
+          name: item.username,
+          score: item.score,
+          questionsAnswered: item.questionsAnswered,
+          gameCompletedAt: item.gameCompletedAt
+        }));
+        setHighScores(transformedScores);
+      } else {
+        throw new Error(data.error || 'Failed to fetch scores');
+      }
+    } catch (error) {
+      console.error('Error fetching high scores:', error);
+      setError('Failed to load online scores');
+      
+      // Fallback to localStorage
       const savedScores = localStorage.getItem('quizTimeHighScores');
       if (savedScores) {
-        setHighScores(JSON.parse(savedScores));
+        const localScores = JSON.parse(savedScores);
+        setHighScores(localScores);
+      } else {
+        // Default scores if nothing is available
+        setHighScores([
+          { name: "Player 1", score: 10000000 },
+          { name: "Player 2", score: 5000000 },
+          { name: "Player 3", score: 1000000 },
+        ]);
       }
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
   
   return (
     <div 
@@ -284,16 +323,38 @@ function HighScores({ onBack }: { onBack: () => void }) {
     >
       <h1 className="text-4xl mb-8 text-[#FFD700]">High Scores</h1>
       <div className="bg-[#000000]/70 p-6 rounded-lg mb-6 w-full max-w-md">
-        {highScores.length > 0 ? (
-          highScores.map((score, index) => (
-            <div key={index} className="flex justify-between text-white mb-4">
-              <span>{score.name}</span>
-              <span className="text-[#FFD700]">{formatPrize(score.score)}</span>
-            </div>
-          ))
-        ) : (
+        {loading ? (
+          <div className="text-center text-white">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
+            <p>Loading scores...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center">
+            <p className="text-orange-400 mb-2">⚠️ {error}</p>
+            <p className="text-white text-sm">Showing local scores</p>
+          </div>
+        ) : null}
+        
+        {!loading && highScores.length > 0 ? (
+          <div className="space-y-3">
+            {highScores.map((score, index) => (
+              <div key={index} className="flex justify-between items-center text-white">
+                <div className="flex items-center gap-2">
+                  <span className="text-[#FFD700] font-bold w-6">#{index + 1}</span>
+                  <span className="text-sm sm:text-base">{score.name}</span>
+                </div>
+                <div className="text-right">
+                  <div className="text-[#FFD700] text-sm sm:text-base">{formatPrize(score.score)}</div>
+                  {score.questionsAnswered && (
+                    <div className="text-xs text-gray-400">{score.questionsAnswered} questions</div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : !loading ? (
           <p className="text-white text-center">No high scores yet!</p>
-        )}
+        ) : null}
       </div>
       <Button text="Back" onClick={onBack} />
     </div>
@@ -377,34 +438,117 @@ function Stats({ onBack, stats }: { onBack: () => void; stats: GameStats }) {
 }
 
 // End Screen component
-function EndScreen({ score, onRestart, onMainMenu, username }: { 
+function EndScreen({ score, onRestart, onMainMenu, username, gameSessionId }: { 
   score: number; 
   onRestart: () => void;
   onMainMenu: () => void;
   username: string;
+  gameSessionId: string;
 }) {
   const [scoreSubmitted, setScoreSubmitted] = useState(false);
+  const [submissionLoading, setSubmissionLoading] = useState(false);
+  const [submissionError, setSubmissionError] = useState('');
+  const [playerRank, setPlayerRank] = useState<number | null>(null);
+
+  const submitScoreToBackend = useCallback(async () => {
+    setSubmissionLoading(true);
+    setSubmissionError('');
+
+    try {
+      // Calculate questions answered based on score
+      const prizeLevels = [
+        1000, 2000, 3000, 5000, 10000, 
+        20000, 40000, 80000, 160000, 320000, 
+        640000, 1250000, 2500000, 5000000, 10000000
+      ];
+      
+      const questionsAnswered = prizeLevels.findIndex(level => level === score) + 1;
+      
+      const response = await fetch('/api/highscores', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username.trim(),
+          score,
+          questionsAnswered: questionsAnswered > 0 ? questionsAnswered : 0,
+          gameCompletedAt: new Date().toISOString(),
+          gameSessionId // Include session ID in the submission
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setPlayerRank(data.data.rank);
+        setScoreSubmitted(true);
+        
+        // Mark this session as submitted
+        const submittedSessions = JSON.parse(localStorage.getItem('quizTimeSubmittedSessions') || '[]');
+        submittedSessions.push(gameSessionId);
+        localStorage.setItem('quizTimeSubmittedSessions', JSON.stringify(submittedSessions));
+        
+        // Also save to localStorage for offline functionality
+        const savedScores = localStorage.getItem('quizTimeHighScores');
+        let highScores = savedScores ? JSON.parse(savedScores) : [];
+        highScores.push({ name: username, score });
+        highScores.sort((a: {score: number}, b: {score: number}) => b.score - a.score);
+        highScores = highScores.slice(0, 10);
+        localStorage.setItem('quizTimeHighScores', JSON.stringify(highScores));
+      } else {
+        setSubmissionError(data.error || 'Failed to save score');
+        
+        // Fallback to localStorage only
+        const savedScores = localStorage.getItem('quizTimeHighScores');
+        let highScores = savedScores ? JSON.parse(savedScores) : [];
+        highScores.push({ name: username, score });
+        highScores.sort((a: {score: number}, b: {score: number}) => b.score - a.score);
+        highScores = highScores.slice(0, 10);
+        localStorage.setItem('quizTimeHighScores', JSON.stringify(highScores));
+        setScoreSubmitted(true);
+        
+        // Mark session as submitted even in fallback case
+        const submittedSessions = JSON.parse(localStorage.getItem('quizTimeSubmittedSessions') || '[]');
+        submittedSessions.push(gameSessionId);
+        localStorage.setItem('quizTimeSubmittedSessions', JSON.stringify(submittedSessions));
+      }
+    } catch (error) {
+      console.error('Error submitting score:', error);
+      setSubmissionError('Network error - score saved locally only');
+      
+      // Fallback to localStorage
+      const savedScores = localStorage.getItem('quizTimeHighScores');
+      let highScores = savedScores ? JSON.parse(savedScores) : [];
+      highScores.push({ name: username, score });
+      highScores.sort((a: {score: number}, b: {score: number}) => b.score - a.score);
+      highScores = highScores.slice(0, 10);
+      localStorage.setItem('quizTimeHighScores', JSON.stringify(highScores));
+      setScoreSubmitted(true);
+      
+      // Mark session as submitted even in error case
+      const submittedSessions = JSON.parse(localStorage.getItem('quizTimeSubmittedSessions') || '[]');
+      submittedSessions.push(gameSessionId);
+      localStorage.setItem('quizTimeSubmittedSessions', JSON.stringify(submittedSessions));
+    } finally {
+      setSubmissionLoading(false);
+    }
+  }, [score, username, gameSessionId]);
 
   // Automatically save score on component mount
   useEffect(() => {
-    if (score > 0 && username) {
-      // Load existing high scores
-      const savedScores = localStorage.getItem('quizTimeHighScores');
-      let highScores = savedScores ? JSON.parse(savedScores) : [];
-      
-      // Add new score
-      highScores.push({ name: username, score });
-      
-      // Sort by score (highest first) and keep only top 10
-      highScores.sort((a: {score: number}, b: {score: number}) => b.score - a.score);
-      highScores = highScores.slice(0, 10);
-      
-      // Save back to localStorage
-      localStorage.setItem('quizTimeHighScores', JSON.stringify(highScores));
-      setScoreSubmitted(true);
+    if (score > 0 && username && !scoreSubmitted && gameSessionId) {
+      // Check if this session has already been submitted
+      const submittedSessions = JSON.parse(localStorage.getItem('quizTimeSubmittedSessions') || '[]');
+      if (!submittedSessions.includes(gameSessionId)) {
+        submitScoreToBackend();
+      } else {
+        console.log('Score already submitted for this session:', gameSessionId);
+        setScoreSubmitted(true);
+      }
     }
-  }, [score, username]);
-  
+  }, [gameSessionId]); // Only depend on gameSessionId to prevent re-runs
+
   return (
     <div 
       className="flex flex-col items-center justify-center h-full"
@@ -416,8 +560,21 @@ function EndScreen({ score, onRestart, onMainMenu, username }: {
         <p className="text-2xl text-white mb-4">Your Prize:</p>
         <p className="text-3xl text-[#FFD700] mb-8">{formatPrize(score)}</p>
         
-        {scoreSubmitted && score > 0 && (
-          <p className="text-green-400 mb-6">Score saved successfully!</p>
+        {submissionLoading && (
+          <p className="text-blue-400 mb-6">💾 Saving score...</p>
+        )}
+        
+        {scoreSubmitted && score > 0 && !submissionLoading && (
+          <div className="mb-6">
+            <p className="text-green-400 mb-2">✅ Score saved successfully!</p>
+            {playerRank && (
+              <p className="text-yellow-400 text-sm">🏆 Your Rank: #{playerRank}</p>
+            )}
+          </div>
+        )}
+        
+        {submissionError && (
+          <p className="text-orange-400 mb-6 text-sm">⚠️ {submissionError}</p>
         )}
         
         <div className="flex justify-center space-x-4">
@@ -504,6 +661,7 @@ export default function QuizTimePage() {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [gameSessionId, setGameSessionId] = useState<string>(''); // Track unique game sessions
   const [backgroundMusic, setBackgroundMusic] = useState<HTMLAudioElement | null>(null);
   const [lifelines, setLifelines] = useState({
     fiftyFifty: true,
@@ -733,6 +891,10 @@ export default function QuizTimePage() {
   }, [currentQuestionIndex, screen, questions.length]);
   
   const startQuiz = () => {
+    // Generate unique session ID for this game
+    const sessionId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    setGameSessionId(sessionId);
+    
     setCurrentQuestionIndex(0);
     setScore(0);
     setTimerPaused(false);
@@ -1035,17 +1197,29 @@ export default function QuizTimePage() {
   }, []);
 
   const saveAskedQuestions = useCallback(() => {
-    if (!username) return;
+    if (!username || !questions.length || currentQuestionIndex >= questions.length) return;
     
     try {
+      const currentQuestion = questions[currentQuestionIndex];
       const savedAskedData = localStorage.getItem('quizTimeAskedQuestions');
       const askedData = savedAskedData ? JSON.parse(savedAskedData) : { users: {} };
-      const userAskedQuestions = askedData.users[username] || [];
-      console.log(`User ${username} has answered ${userAskedQuestions.length} unique questions so far`);
+      
+      if (!askedData.users[username]) {
+        askedData.users[username] = [];
+      }
+      
+      // Add current question to asked questions if not already present
+      if (!askedData.users[username].includes(currentQuestion.question)) {
+        askedData.users[username].push(currentQuestion.question);
+        localStorage.setItem('quizTimeAskedQuestions', JSON.stringify(askedData));
+        console.log(`Marked question "${currentQuestion.question}" as asked for ${username}`);
+      }
+      
+      console.log(`User ${username} has answered ${askedData.users[username].length} unique questions so far`);
     } catch (error) {
-      console.error("Error checking asked questions:", error);
+      console.error("Error saving asked questions:", error);
     }
-  }, [username]);
+  }, [username, questions, currentQuestionIndex]);
 
   const handleFiftyFifty = useCallback(() => {
     if (lifelines.fiftyFifty && lifeLinesRemaining > 0 && !answerLocked) {
@@ -1156,6 +1330,7 @@ export default function QuizTimePage() {
                 onRestart={startQuiz}
                 onMainMenu={() => setScreen('menu')}
                 username={username}
+                gameSessionId={gameSessionId}
               />
             )}
             

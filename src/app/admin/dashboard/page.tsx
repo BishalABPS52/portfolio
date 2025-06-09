@@ -1,18 +1,79 @@
-'use client';
+import dbConnect from '@/lib/db';
+import { Blog } from '@/models/Blog';
+import { Video } from '@/models/Video';
+import { Poem } from '@/models/Poem';
+import Design from '@/models/Design';
+import Quote from '@/models/Quote';
+import Essay from '@/models/Essay';
+import { GameUser } from '@/models/GameUser';
+import Highscore from '@/models/Highscore';
+import AdminDashboardClient from './AdminDashboardClient';
+import { checkAdminAuth } from '@/lib/adminAuth';
 
-export default function DashboardPage() {
-  return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Dashboard content will go here */}
-          <div className="bg-[var(--card-background)] p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Welcome</h2>
-            <p className="text-[var(--muted)]">This is your admin dashboard.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+interface DashboardStats {
+  blogs: number;
+  videos: number;
+  poems: number;
+  designs: number;
+  quotes: number;
+  essays: number;
+  gameUsers: number;
+  highscores: number;
+}
+
+async function getDashboardStats(): Promise<DashboardStats> {
+  try {
+    await dbConnect();
+    
+    const [
+      blogsCount,
+      videosCount,
+      poemsCount,
+      designsCount,
+      quotesCount,
+      essaysCount,
+      gameUsersCount,
+      highscoresCount
+    ] = await Promise.all([
+      Blog.countDocuments(),
+      Video.countDocuments(),
+      Poem.countDocuments(),
+      Design.countDocuments(),
+      Quote.countDocuments(),
+      Essay.countDocuments(),
+      GameUser.countDocuments(),
+      Highscore.countDocuments()
+    ]);
+
+    return {
+      blogs: blogsCount,
+      videos: videosCount,
+      poems: poemsCount,
+      designs: designsCount,
+      quotes: quotesCount,
+      essays: essaysCount,
+      gameUsers: gameUsersCount,
+      highscores: highscoresCount
+    };
+  } catch (error) {
+    console.error('Error fetching dashboard stats:', error);
+    return {
+      blogs: 0,
+      videos: 0,
+      poems: 0,
+      designs: 0,
+      quotes: 0,
+      essays: 0,
+      gameUsers: 0,
+      highscores: 0
+    };
+  }
+}
+
+export default async function AdminDashboard() {
+  // Check authentication before proceeding
+  await checkAdminAuth();
+  
+  const initialStats = await getDashboardStats();
+  return <AdminDashboardClient initialStats={initialStats} />;
 }

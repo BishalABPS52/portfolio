@@ -24,4 +24,5 @@ const essaySchema = new mongoose.Schema({
   },
 });
 
-export const Essay = mongoose.models.Essay || mongoose.model('Essay', essaySchema);
+const Essay = mongoose.models.Essay || mongoose.model('Essay', essaySchema);
+export default Essay;

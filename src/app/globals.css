@@ -233,3 +233,38 @@ body {
 .dark .card-subheading-color, .dark .card-subheading-color h2, .dark .card-subheading-color h3, .dark .card-subheading-color h4, .dark .github-section-title, .dark .github-project-content, .dark .freelance-availability {
   color: #fdf0d5 !important;
 }
+
+/* Admin Login Animations */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Backdrop blur support for older browsers */
+@supports not (backdrop-filter: blur(20px)) {
+  .backdrop-blur-md {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+}
