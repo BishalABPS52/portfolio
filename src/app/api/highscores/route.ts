@@ -12,6 +12,15 @@ export async function GET() {
         error: 'Database not available'
       }, { status: 503 });
     }
+
+    // Additional check: verify connection is actually ready
+    if (connection.connection.readyState !== 1) {
+      console.error('MongoDB connection not ready for queries, readyState:', connection.connection.readyState);
+      return NextResponse.json({
+        success: false,
+        error: 'Database connection not ready'
+      }, { status: 503 });
+    }
     
     // Get top 10 high scores, sorted by score (descending) and then by questions answered (descending)
     const highscores = await Highscore.find({})
@@ -46,6 +55,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         success: false,
         error: 'Database not available'
+      }, { status: 503 });
+    }
+
+    // Additional check: verify connection is actually ready
+    if (connection.connection.readyState !== 1) {
+      console.error('MongoDB connection not ready for queries, readyState:', connection.connection.readyState);
+      return NextResponse.json({
+        success: false,
+        error: 'Database connection not ready'
       }, { status: 503 });
     }
     

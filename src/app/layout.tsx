@@ -5,6 +5,7 @@ import "./responsive.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { Toaster } from "react-hot-toast";
 import DynamicTools from "@/components/DynamicTools";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -71,8 +72,7 @@ export default function RootLayout({
 }>) {
   return (    <html lang="en">
       <body className={`antialiased ${geist.variable} ${geistMono.variable}`}>
-        <ThemeProvider>
-          {children}
+        <ThemeProvider>          {children}
           <Toaster
             position="bottom-right"
             toastOptions={{
@@ -85,6 +85,7 @@ export default function RootLayout({
             }}
           />
           {process.env.NODE_ENV === 'development' && <DynamicTools />}
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

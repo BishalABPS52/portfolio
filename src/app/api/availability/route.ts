@@ -7,7 +7,23 @@ type AvailabilityStatusLean = Pick<IAvailabilityStatus, 'isAvailable' | 'statusM
 
 export async function GET() {
   try {
-    await dbConnect();
+    const connection = await dbConnect();
+    
+    if (!connection) {
+      return NextResponse.json({
+        success: false,
+        error: 'Database not available'
+      }, { status: 503 });
+    }
+
+    // Additional check: verify connection is actually ready
+    if (connection.connection.readyState !== 1) {
+      console.error('MongoDB connection not ready for queries, readyState:', connection.connection.readyState);
+      return NextResponse.json({
+        success: false,
+        error: 'Database connection not ready'
+      }, { status: 503 });
+    }
     
     // Get the latest availability status
     const status = await AvailabilityStatus.findOne({})
@@ -58,7 +74,23 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   try {
-    await dbConnect();
+    const connection = await dbConnect();
+    
+    if (!connection) {
+      return NextResponse.json({
+        success: false,
+        error: 'Database not available'
+      }, { status: 503 });
+    }
+
+    // Additional check: verify connection is actually ready
+    if (connection.connection.readyState !== 1) {
+      console.error('MongoDB connection not ready for queries, readyState:', connection.connection.readyState);
+      return NextResponse.json({
+        success: false,
+        error: 'Database connection not ready'
+      }, { status: 503 });
+    }
     
     const body = await request.json();
     const { isAvailable, statusMessage, adminPassword } = body;
