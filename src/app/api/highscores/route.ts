@@ -4,7 +4,14 @@ import Highscore from '@/models/Highscore';
 
 export async function GET() {
   try {
-    await dbConnect();
+    const connection = await dbConnect();
+    
+    if (!connection) {
+      return NextResponse.json({
+        success: false,
+        error: 'Database not available'
+      }, { status: 503 });
+    }
     
     // Get top 10 high scores, sorted by score (descending) and then by questions answered (descending)
     const highscores = await Highscore.find({})
@@ -19,10 +26,12 @@ export async function GET() {
     });
   } catch (error) {
     console.error('Error fetching highscores:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
       { 
         success: false, 
-        error: 'Failed to fetch highscores' 
+        error: 'Failed to fetch highscores',
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
       },
       { status: 500 }
     );
@@ -31,7 +40,14 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    await dbConnect();
+    const connection = await dbConnect();
+    
+    if (!connection) {
+      return NextResponse.json({
+        success: false,
+        error: 'Database not available'
+      }, { status: 503 });
+    }
     
     const body = await request.json();
     const { username, score, questionsAnswered, gameCompletedAt } = body;

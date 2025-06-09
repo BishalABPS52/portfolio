@@ -87,8 +87,7 @@ const gameUserSchema = new mongoose.Schema({
 });
 
 // Indexes for efficient querying
-gameUserSchema.index({ username: 1 });
-gameUserSchema.index({ email: 1 });
+// Note: username and email already have unique indexes from schema definition
 gameUserSchema.index({ totalScore: -1 });
 gameUserSchema.index({ bestScore: -1 });
 gameUserSchema.index({ createdAt: -1 });

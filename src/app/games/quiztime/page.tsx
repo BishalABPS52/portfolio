@@ -547,7 +547,7 @@ function EndScreen({ score, onRestart, onMainMenu, username, gameSessionId }: {
         setScoreSubmitted(true);
       }
     }
-  }, [gameSessionId]); // Only depend on gameSessionId to prevent re-runs
+  }, [score, scoreSubmitted, submitScoreToBackend, username, gameSessionId]); // Include all dependencies
 
   return (
     <div 

@@ -36,8 +36,8 @@ const HighscoreSchema: Schema = new Schema({
 });
 
 // Create indexes for better query performance
+// Note: No duplicate username index since it's not unique in this collection
 HighscoreSchema.index({ score: -1, questionsAnswered: -1 });
-HighscoreSchema.index({ username: 1 });
 HighscoreSchema.index({ gameCompletedAt: -1 });
 
 export default mongoose.models.Highscore || mongoose.model<IHighscore>('Highscore', HighscoreSchema);
