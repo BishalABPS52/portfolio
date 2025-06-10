@@ -16,8 +16,7 @@ const BioCard = () => {
     isAvailable: true,
     statusMessage: 'Available for Work',
     lastUpdated: new Date().toISOString()
-  });
-  const [loading, setLoading] = useState(true);
+  });  const [loading, setLoading] = useState(true);
   const { isMobile } = useScreenSize();
 
   useEffect(() => {
@@ -41,12 +40,11 @@ const BioCard = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  return (
-    <div className="bg-[var(--card-background)] rounded-3xl p-3 sm:p-4 h-[calc(100%)] relative overflow-hidden grid-item border-[3px] border-[#003049] transition-colors duration-300">
+  };  return (
+    <div className="bg-[var(--card-background)] rounded-3xl p-3 sm:p-4 h-[calc(100%)] relative overflow-hidden grid-item border-[3px] border-[#003049] transition-colors duration-300 group hover:shadow-2xl hover:shadow-[#780000]/20 dark:hover:shadow-[#c1121f]/20">
+      
       {/* Drag Handle */}
-      <div className="drag-handle absolute top-4 right-4 w-6 h-6 cursor-move opacity-0 hover:opacity-100 transition-opacity">
+      <div className="drag-handle absolute top-4 right-4 w-6 h-6 cursor-move opacity-0 hover:opacity-100 transition-opacity z-10">
         <div className="grid grid-cols-2 gap-1">
           <div className="w-2 h-2 bg-[var(--muted)] rounded-full"></div>
           <div className="w-2 h-2 bg-[var(--muted)] rounded-full"></div>
@@ -56,18 +54,17 @@ const BioCard = () => {
       </div>
 
       {/* Avatar Section */}      <div className="relative mb-4 sm:mb-6 flex justify-center sm:justify-start">
-        <div className="relative inline-block">
-          {/* Pulse Animation */}
+        <div className="relative inline-block">          {/* Pulse Animation */}
           <motion.div
-            className={`absolute inset-0 rounded-full ${availabilityStatus.isAvailable ? 'bg-[var(--accent-green)]' : 'bg-[var(--muted)]'} opacity-30`}
+            className={`absolute inset-0 rounded-full ${availabilityStatus.isAvailable ? 'bg-[#69cdb5]' : 'bg-[var(--muted)]'} opacity-30`}
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
           />
-          <div className={`absolute inset-0 rounded-full ${availabilityStatus.isAvailable ? 'bg-[var(--accent-green)]' : 'bg-[var(--muted)]'} opacity-20`} />
+          <div className={`absolute inset-0 rounded-full ${availabilityStatus.isAvailable ? 'bg-[#69cdb5]' : 'bg-[var(--muted)]'} opacity-20`} />
 
           {/* Profile Image */}
           <motion.div
-            className="relative w-20 h-20 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-[var(--accent-green)] shadow-lg"
+            className="relative w-20 h-20 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-[#69cdb5] shadow-lg"
             whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.3 }}
           >
@@ -90,22 +87,20 @@ const BioCard = () => {
           className="text-[var(--foreground)] text-sm sm:text-lg leading-relaxed font-silka"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
+          transition={{ duration: 0.6, delay: 0.2 }}        >
           Namaste, I'm{' '}
-          <span className="font-moranga text-2xl sm:text-4xl text-[var(--accent-purple)]">
+          <span className="font-moranga text-2xl sm:text-4xl text-[#780000] dark:text-[#c1121f]">
             bishal
           </span>
           , a Computer Engineering student from Nepal and a passionate software engineering enthusiast skilled in React, Node.js, Python, and C++, building real-world tech solutions.
         </motion.p>
       </div>      {/* Status Display Button (Read-only) */}
-      <div className="flex justify-center sm:justify-start">
-        <motion.div
+      <div className="flex justify-center sm:justify-start">        <motion.div
           className={`px-3 py-2 sm:px-4 sm:py-2 rounded-full font-silka-medium text-xs sm:text-sm transition-all duration-300 shadow-lg ${
             loading
               ? 'bg-[var(--muted)] text-white'
               : availabilityStatus.isAvailable
-              ? 'bg-[var(--accent-green)] text-white'
+              ? 'bg-[#69cdb5] text-white'
               : 'bg-[var(--muted)] text-white'
           }`}
           initial={{ opacity: 0, y: 20 }}

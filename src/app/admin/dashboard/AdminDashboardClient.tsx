@@ -19,12 +19,10 @@ import {
 interface DashboardStats {
   blogs: number;
   videos: number;
-  poems: number;
   designs: number;
   quotes: number;
   essays: number;
   gameUsers: number;
-  highscores: number;
 }
 
 interface AdminDashboardClientProps {
@@ -42,12 +40,10 @@ export default function AdminDashboardClient({ initialStats }: AdminDashboardCli
       const endpoints = [
         '/api/blogs',
         '/api/videos',
-        '/api/poems',
         '/api/designs',
         '/api/quotes',
         '/api/essays',
         '/api/game-users',
-        '/api/highscores',
       ];
 
       const responses = await Promise.all(
@@ -61,12 +57,10 @@ export default function AdminDashboardClient({ initialStats }: AdminDashboardCli
       setStats({
         blogs: data[0]?.length || 0,
         videos: data[1]?.length || 0,
-        poems: data[2]?.length || 0,
-        designs: data[3]?.length || 0,
-        quotes: data[4]?.length || 0,
-        essays: data[5]?.length || 0,
-        gameUsers: data[6]?.length || 0,
-        highscores: data[7]?.length || 0,
+        designs: data[2]?.length || 0,
+        quotes: data[3]?.length || 0,
+        essays: data[4]?.length || 0,
+        gameUsers: data[5]?.length || 0,
       });
     } catch (error) {
       console.error('Error fetching stats:', error);
@@ -91,14 +85,6 @@ export default function AdminDashboardClient({ initialStats }: AdminDashboardCli
       href: '/admin/videos',
       color: 'bg-red-500',
       description: 'Manage video content'
-    },
-    {
-      title: 'Poems',
-      count: stats.poems,
-      icon: BookOpenIcon,
-      href: '/admin/poems',
-      color: 'bg-purple-500',
-      description: 'Manage poetry collection'
     },
     {
       title: 'Designs',
@@ -131,14 +117,6 @@ export default function AdminDashboardClient({ initialStats }: AdminDashboardCli
       href: '/admin/game-users',
       color: 'bg-cyan-500',
       description: 'Manage game users'
-    },
-    {
-      title: 'High Scores',
-      count: stats.highscores,
-      icon: TrophyIcon,
-      href: '/admin/highscores',
-      color: 'bg-yellow-500',
-      description: 'View game statistics'
     },
   ];
 
@@ -201,7 +179,7 @@ export default function AdminDashboardClient({ initialStats }: AdminDashboardCli
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Text Content</p>
                 <p className="text-3xl font-bold text-gray-900">
-                  {stats.blogs + stats.poems + stats.quotes + stats.essays}
+                  {stats.blogs + stats.quotes + stats.essays}
                 </p>
               </div>
             </div>

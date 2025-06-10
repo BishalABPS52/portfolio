@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import GameCard from './GameCard';
 
 const PlayZone = () => {
@@ -19,23 +20,58 @@ const PlayZone = () => {
       tech: ['C++', 'SFML', 'AI']
     },
     {
-      title: 'Quiz Time',
-      description: 'An interactive quiz application that tests your knowledge across various topics. Features multiple choice questions, score tracking, and instant feedback.',
+      title: 'QuizTime',
+      description: 'An interactive quiz application that tests your knowledge across various topics. Features multiple choice questions, lifelines, and score tracking.',
       imageUrl: '/assets/images/QuizTime.png',
-      status: 'available' as const,
-      tech: ['Python', 'Pygame', 'JSON'],
-      githubUrl: 'https://github.com/BishalABPS/QuizTime',
-      playUrl: '/games/quiztime'
+      status: 'coming-soon' as const,
+      tech: ['React', 'TypeScript', 'Next.js'],
+      githubUrl: 'https://github.com/BishalABPS/QuizTime'
     }
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.9 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {games.map((game) => (
-          <GameCard key={game.title} game={game} />
+    <div className="p-6 max-w-7xl mx-auto relative">
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {games.map((game, index) => (
+          <motion.div
+            key={game.title}
+            variants={cardVariants}
+            whileHover={{ y: -5, scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          >
+            <GameCard game={game} />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };

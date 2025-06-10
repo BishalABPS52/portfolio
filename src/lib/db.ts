@@ -40,13 +40,12 @@ async function dbConnect(): Promise<typeof mongoose | null> {
 
     if (!cached.promise) {
       const opts = {
-        // Temporarily enable buffering to handle connection delays
-        bufferCommands: true,
-        bufferMaxEntries: 0,
+        // Modern MongoDB connection options
+        bufferCommands: false, // Disable buffering to fail fast when not connected
         maxPoolSize: 10,
-        serverSelectionTimeoutMS: 20000, // Increased timeout
+        serverSelectionTimeoutMS: 5000,
         socketTimeoutMS: 45000,
-        connectTimeoutMS: 25000, // Increased timeout
+        connectTimeoutMS: 10000,
         retryWrites: true,
         retryReads: true,
         maxIdleTimeMS: 30000,
@@ -57,20 +56,6 @@ async function dbConnect(): Promise<typeof mongoose | null> {
       
       cached.promise = mongoose.connect(MONGODB_URI, opts).then(async (mongooseInstance) => {
         console.log('✅ MongoDB connected successfully, readyState:', mongooseInstance.connection.readyState);
-        
-        // Wait a bit to ensure connection is fully established
-        let attempts = 0;
-        while (mongooseInstance.connection.readyState !== 1 && attempts < 30) {
-          await new Promise(resolve => setTimeout(resolve, 100));
-          attempts++;
-        }
-        
-        if (mongooseInstance.connection.readyState === 1) {
-          console.log('✅ MongoDB connection fully established and ready');
-        } else {
-          console.warn('⚠️ MongoDB connection established but not fully ready');
-        }
-        
         return mongooseInstance;
       }).catch((error) => {
         console.error('❌ MongoDB connection failed:', error);

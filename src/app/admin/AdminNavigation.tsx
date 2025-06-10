@@ -6,11 +6,9 @@ import {
   HomeIcon,
   DocumentTextIcon,
   VideoCameraIcon,
-  UserGroupIcon,
   SparklesIcon,
   ChatBubbleBottomCenterTextIcon,
-  BookOpenIcon,
-  TrophyIcon
+  BookOpenIcon
 } from '@heroicons/react/24/outline';
 
 const navigationItems = [
@@ -38,26 +36,11 @@ const navigationItems = [
     name: 'Quotes',
     href: '/admin/quotes',
     icon: ChatBubbleBottomCenterTextIcon,
-  },
+    },
   {
     name: 'Essays',
     href: '/admin/essays',
     icon: BookOpenIcon,
-  },
-  {
-    name: 'Poems',
-    href: '/admin/poems',
-    icon: DocumentTextIcon,
-  },
-  {
-    name: 'Game Users',
-    href: '/admin/game-users',
-    icon: UserGroupIcon,
-  },
-  {
-    name: 'Highscores',
-    href: '/admin/highscores',
-    icon: TrophyIcon,
   },
 ];
 

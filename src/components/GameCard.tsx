@@ -23,10 +23,20 @@ const GameCard = ({ game }: { game: Game }) => {
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
-      className={`rounded-3xl p-6 bg-[var(--card-background)] relative overflow-hidden ${
+      className={`rounded-3xl p-6 bg-[var(--card-background)] relative overflow-hidden group border-2 border-transparent hover:border-[#780000]/20 dark:hover:border-[#c1121f]/20 transition-all duration-500 ${
         !isAvailable ? 'opacity-75' : ''
       }`}
     >
+      
+      {/* Status indicator */}
+      {!isAvailable && (
+        <div className="absolute top-4 right-4 z-20">
+          <div className="px-3 py-1 bg-gradient-to-r from-[#c1121f] to-[#780000] rounded-full text-xs font-bold text-white animate-pulse dark:from-[#780000] dark:to-[#c1121f]">
+            COMING SOON
+          </div>
+        </div>
+      )}
+      
       <div className="relative z-10">
         {/* Game Image */}
         <div className="w-full h-36 sm:h-48 mb-4 relative rounded-2xl overflow-hidden">

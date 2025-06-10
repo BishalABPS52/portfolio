@@ -18,13 +18,6 @@ const CreativeCard = () => {
   
   const creativeItems: CreativeItemProps[] = [
     {
-      title: 'Poems',
-      imageUrl: '/assets/images/writing.jpg',
-      description: 'A collection of my poetic expressions and verses',
-      category: 'Writing',
-      href: '/creative/poems'
-    },
-    {
       title: 'Design',
       imageUrl: '/assets/images/design.jpg',
       description: 'Digital and graphic design portfolio',

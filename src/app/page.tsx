@@ -14,6 +14,7 @@ import ProjectsShowcase from '@/components/ProjectCard';
 import CertificatesCard from '@/components/CertificatesCard';
 import CreativeCard from '@/components/CreativeCard';
 import BlogsCard from '@/components/BlogsCard';
+import CVCard from '@/components/CVCard';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
@@ -33,12 +34,11 @@ export default function Home() {
 
     window.addEventListener('portfolioFilter', handleFilterChange as EventListener);
     return () => window.removeEventListener('portfolioFilter', handleFilterChange as EventListener);
-  }, []);
-  const getFilteredComponents = () => {
-    const allComponents = [      { component: <BioCard key="bio" />, category: 'About', size: 'col-span-1 md:col-span-2 row-span-1' },
-      { component: <LocationCard key="location" />, category: 'About', size: 'col-span-1 md:col-span-1 row-span-1' },
-      { component: <SkillsCard key="skills" />, category: 'About', size: 'col-span-1 md:col-span-1 row-span-1' },
-      { component: <ExperienceCard key="experience" />, category: 'Skills', size: 'col-span-1 md:col-span-2 row-span-1' },
+  }, []);  const getFilteredComponents = () => {
+    const allComponents = [      { component: <BioCard key="bio" />, category: 'About', size: 'col-span-1 sm:col-span-2 lg:col-span-2 row-span-1' },
+      { component: <LocationCard key="location" />, category: 'About', size: 'col-span-1 sm:col-span-1 lg:col-span-1 row-span-1' },
+      { component: <SkillsCard key="skills" />, category: 'About', size: 'col-span-1 sm:col-span-1 lg:col-span-1 row-span-1' },
+      { component: <ExperienceCard key="experience" />, category: 'Skills', size: 'col-span-1 sm:col-span-2 lg:col-span-2 row-span-1' },
     ];
 
     if (activeFilter === 'PlayZone') {
@@ -47,69 +47,10 @@ export default function Home() {
           <PlayZone />
         </div>
       );
-    }
-
-    if (activeFilter === 'CV') {
+    }    if (activeFilter === 'CV') {
       return (
-        <div className="flex justify-center items-center w-full">
-          <div className="relative max-w-2xl w-full">
-            <div className="absolute inset-0 z-0 animate-gradient bg-gradient-to-br from-teal-400/30 via-teal-200/20 to-blue-300/20 blur-2xl opacity-80" style={{ pointerEvents: 'none' }} />
-            <div className={`relative z-10 rounded-2xl shadow-xl w-full p-8 bg-gradient-to-br from-teal-400/40 via-teal-200/30 to-blue-300/30 backdrop-blur-md ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-              <h1 className={`text-4xl font-moranga text-center mb-6 ${theme === 'dark' ? 'text-white' : 'text-teal-700'}`}>Curriculum Vitae</h1>
-              <div className="prose max-w-none mx-auto">
-                <h2 className="text-2xl font-bold mb-2">Bishal Shrestha</h2>
-                <p><strong>Location:</strong> Kathmandu, Nepal</p>
-                <p><strong>Phone:</strong> +9779765532314</p>
-                <p><strong>Email:</strong> bs426808@gmail.com</p>
-                <hr className="my-4" />
-                <h3 className="text-xl font-bold mb-1">Profile</h3>
-                <p>
-                  Versatile and results-driven developer specializing in web and software development, game testing, and backend solutions. Proficient in C++, Python, JavaScript, React, and Node.js. Passionate about innovation and problem-solving.
-                </p>
-                <hr className="my-4" />
-                <h3 className="text-xl font-bold mb-1">Experience</h3>
-                <ul className="list-disc pl-5">
-                  <li><strong>Freelancer (2023 - Present):</strong> Upwork, Fiverr, PeoplePerHour<br />- Developed websites using HTML, CSS, JavaScript, PHP<br />- Backend solutions with SQL and PHP<br />- Data entry, typing, content writing</li>
-                  <li><strong>Game Tester (2023 - Present):</strong> Tested mechanics, UI, performance, reported bugs and suggested improvements</li>
-                  <li><strong>Part-Time Tuition Teacher (2022 - 2023):</strong> Taught Math, Science, Additional Math, Computer Science</li>
-                </ul>
-                <hr className="my-4" />
-                <h3 className="text-xl font-bold mb-1">Education</h3>
-                <ul className="list-disc pl-5">
-                  <li>SEE (2009–2021), Rastriya Vibhuti Samudayik Shiksha Sadan – GPA: 4.0</li>
-                  <li>NEB +2 Science (2021–2023), Capital College and Research Center – GPA: 3.65</li>
-                  <li>Bachelor in Computer Engineering (2023–Present), IOE Thapathali</li>
-                </ul>
-                <hr className="my-4" />
-                <h3 className="text-xl font-bold mb-1">Skills</h3>
-                <ul className="list-disc pl-5">
-                  <li>Web Development: HTML, CSS, JavaScript, PHP, React, Node.js</li>
-                  <li>Game Testing: Bug reporting, gameplay analysis, debugging tools</li>
-                  <li>Software: C, C++, Python</li>
-                  <li>Database & Backend: SQL, PHP</li>
-                  <li>Version Control: Git, GitHub</li>
-                  <li>Freelancing: Data entry, typing, copywriting</li>
-                </ul>
-                <hr className="my-4" />
-                <h3 className="text-xl font-bold mb-1">Hobbies</h3>
-                <ul className="list-disc pl-5">
-                  <li>Writing & Reading Books</li>
-                  <li>Programming/Coding</li>
-                  <li>Game Testing & Debugging</li>
-                </ul>
-              </div>
-              <div className="w-full flex justify-center mt-8">
-                <a
-                  href="https://drive.google.com/uc?export=download&id=1daAdfqAaQiI96vRhH5XqgyOit654SY1w"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 bg-[var(--card-background)] border border-[var(--border)] rounded-full font-silka-medium text-sm text-[var(--foreground)] shadow-lg hover:opacity-80 transition-all duration-300"
-                >
-                  Download CV
-                </a>
-              </div>
-            </div>
-          </div>
+        <div className="w-full">
+          <CVCard />
         </div>
       );
     }
@@ -146,57 +87,63 @@ export default function Home() {
         </div>
       ));
   };
-
   return (
-    <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+    <div className="min-h-screen bg-[var(--background)] transition-colors duration-300 relative overflow-hidden">      {/* Animated Background Elements */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-[#780000]/10 to-[#c1121f]/10 rounded-full mix-blend-multiply filter blur-xl animate-float dark:from-[#c1121f]/10 dark:to-[#780000]/10"></div>
+        <div className="absolute top-40 right-10 w-72 h-72 bg-gradient-to-r from-[#c1121f]/10 to-[#780000]/10 rounded-full mix-blend-multiply filter blur-xl animate-float-delay dark:from-[#780000]/10 dark:to-[#c1121f]/10"></div>
+        <div className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-r from-[#780000]/10 to-[#c1121f]/10 rounded-full mix-blend-multiply filter blur-xl animate-pulse-slow dark:from-[#c1121f]/10 dark:to-[#780000]/10"></div>
+        <div className="absolute bottom-40 right-20 w-64 h-64 bg-gradient-to-r from-[#c1121f]/10 to-[#780000]/10 rounded-full mix-blend-multiply filter blur-xl animate-bounce-slow dark:from-[#780000]/10 dark:to-[#c1121f]/10"></div>
+      </div>
+      
       <Header />
-      <main className="container mx-auto px-4 py-8">
-        {/* Welcome Message: only show on Home */}
+      <main className="container mx-auto px-4 py-8 relative z-10">        {/* Welcome Message: only show on Home */}
         {activeFilter === 'Home' && (
           <motion.div
-            className="text-center mb-8"
+            className="text-center mb-8 relative"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-4xl font-moranga mb-2" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
+          >            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#780000]/5 to-transparent blur-sm dark:via-[#c1121f]/5"></div>            <h1 className="text-4xl font-moranga mb-2 relative text-[#780000] dark:text-[#c1121f]">
               Welcome to my portfolio
             </h1>
-            <p className="text-[var(--muted)] font-silka"></p>
+            <div className="w-32 h-1 bg-gradient-to-r from-[#780000] to-[#c1121f] mx-auto rounded-full animate-pulse dark:from-[#c1121f] dark:to-[#780000]"></div>
+            <p className="text-[var(--muted)] font-silka mt-2"></p>
           </motion.div>
         )}        {/* About Me Heading: only show on About */}
         {activeFilter === 'About' && (
           <motion.div
-            className="text-center mb-8"
+            className="text-center mb-8 relative"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-4xl font-moranga mb-2" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
+          >            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#780000]/5 to-transparent blur-sm dark:via-[#c1121f]/5"></div>            <h1 className="text-4xl font-moranga mb-2 relative text-[#780000] dark:text-[#c1121f]">
               About me
             </h1>
+            <div className="w-24 h-1 bg-gradient-to-r from-[#780000] to-[#c1121f] mx-auto rounded-full animate-pulse dark:from-[#c1121f] dark:to-[#780000]"></div>
           </motion.div>
-        )}
-
-        {/* Skills Heading: only show on Skills */}
+        )}        {/* Skills Heading: only show on Skills */}
         {activeFilter === 'Skills' && (
           <motion.div
-            className="text-center mb-8"
+            className="text-center mb-8 relative"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-4xl font-moranga mb-2" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
+          >            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#780000]/5 to-transparent blur-sm dark:via-[#c1121f]/5"></div>            <h1 className="text-4xl font-moranga mb-2 relative text-[#780000] dark:text-[#c1121f]">
               My Skills
             </h1>
-            <p className="text-[var(--muted)] font-silka">Technical expertise and proficiencies</p>
+            <div className="w-28 h-1 bg-gradient-to-r from-[#780000] to-[#c1121f] mx-auto rounded-full animate-pulse dark:from-[#c1121f] dark:to-[#780000]"></div>
+            <p className="text-[var(--muted)] font-silka mt-2">Technical expertise and proficiencies</p>
           </motion.div>
-        )}
-
-        {/* Main Grid Layout: Home, Skills, or About */}
+        )}        {/* Main Grid Layout: Home, Skills, or About */}
         {(activeFilter === 'Home' || activeFilter === 'Skills' || activeFilter === 'About') && (
-          <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)]">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl w-full px-4">              {getFilteredComponents()}
+          <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)] relative">            {/* Decorative Elements */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-10 left-1/4 w-2 h-2 bg-[#780000] rounded-full animate-ping opacity-60 dark:bg-[#c1121f]"></div>
+              <div className="absolute top-32 right-1/3 w-1 h-1 bg-[#c1121f] rounded-full animate-pulse opacity-40 dark:bg-[#780000]"></div>
+              <div className="absolute bottom-20 left-1/3 w-3 h-3 bg-[#780000] rounded-full animate-bounce opacity-30 dark:bg-[#c1121f]"></div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl w-full px-4 relative z-10">{getFilteredComponents()}
               {activeFilter === 'Skills' && (
                 <div className="grid-item col-span-1 md:col-span-4">
                   <LearnCard />
@@ -216,44 +163,53 @@ export default function Home() {
           <div className="flex justify-center items-center min-h-screen bg-[var(--background)]">
             {getFilteredComponents()}
           </div>
-        )}
-
-        {/* Featured Projects Section - Only show on Home */}
+        )}        {/* Featured Projects Section - Only show on Home */}
         {activeFilter === 'Home' && (
           <motion.div
-            className="mb-12"
+            className="mb-12 relative"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-moranga" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
-                  Featured Projects
-                </h2>
-                <p className="text-[var(--muted)] text-sm">Highlighted works and achievements</p>
+          >            {/* Decorative Background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#780000]/10 via-[#c1121f]/10 to-[#780000]/10 rounded-3xl blur-xl dark:from-[#c1121f]/10 dark:via-[#780000]/10 dark:to-[#c1121f]/10"></div>
+            <div className="relative z-10 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
+              <div className="flex items-center justify-between mb-6">
+                <div>                  <h2 className="text-2xl font-moranga text-[#780000] dark:text-[#c1121f]">
+                    Featured Projects
+                  </h2>
+                  <p className="text-[var(--muted)] text-sm mt-1">Highlighted works and achievements</p>
+                  <div className="w-16 h-0.5 bg-gradient-to-r from-[#780000] to-[#c1121f] mt-2 rounded-full dark:from-[#c1121f] dark:to-[#780000]"></div>
+                </div>
               </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <ProjectsShowcase />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <ProjectsShowcase />
+              </div>
             </div>
           </motion.div>
         )}        {/* PlayZone Section */}
         {activeFilter === 'PlayZone' && (
           <>
             <motion.div
-              className="text-center mb-8"
+              className="text-center mb-8 relative"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-            >
-              <h1 className="text-4xl font-moranga mb-2" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
+            >              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#780000]/5 to-transparent blur-sm dark:via-[#c1121f]/5"></div>
+              <h1 className="text-4xl font-moranga mb-2 relative text-[#780000] dark:text-[#c1121f]">
                 Play Zone
               </h1>
-              <p className="text-[var(--muted)]">Interactive games and applications</p>
+              <div className="w-24 h-1 bg-gradient-to-r from-[#780000] to-[#c1121f] mx-auto rounded-full animate-pulse dark:from-[#c1121f] dark:to-[#780000]"></div>
+              <p className="text-[var(--muted)] mt-2">Interactive games and applications</p>
             </motion.div>
-            <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)]">
-              <div className="max-w-7xl w-full px-4">
+            <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)] relative">
+              {/* Decorative Gaming Elements */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-16 left-1/4 w-4 h-4 bg-yellow-400 rounded-full animate-ping opacity-40"></div>
+                <div className="absolute top-32 right-1/4 w-3 h-3 bg-green-400 rounded-full animate-bounce opacity-50"></div>
+                <div className="absolute bottom-32 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-pulse opacity-60"></div>
+                <div className="absolute bottom-16 right-1/3 w-5 h-5 bg-purple-400 rounded-full animate-spin opacity-30"></div>
+              </div>
+              <div className="max-w-7xl w-full px-4 relative z-10">
                 <PlayZone />
               </div>
             </div>
@@ -262,62 +218,80 @@ export default function Home() {
         {activeFilter === 'Projects' && (
           <>
             <motion.div
-              className="text-center mb-8"
+              className="text-center mb-8 relative"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-            >
-              <h1 className="text-4xl font-moranga mb-2" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
+            >              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#780000]/5 to-transparent blur-sm dark:via-[#c1121f]/5"></div>
+              <h1 className="text-4xl font-moranga mb-2 relative text-[#780000] dark:text-[#c1121f]">
                 My Projects
               </h1>
-              <p className="text-[var(--muted)]">All repositories from my GitHub profile</p>
+              <div className="w-28 h-1 bg-gradient-to-r from-[#780000] to-[#c1121f] mx-auto rounded-full animate-pulse dark:from-[#c1121f] dark:to-[#780000]"></div>
+              <p className="text-[var(--muted)] mt-2">All repositories from my GitHub profile</p>
             </motion.div>
-            <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)]">
-              <div className="max-w-5xl w-full px-4">
+            <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)] relative">
+              {/* Code-themed decorative elements */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-20 left-1/4 text-2xl text-green-400/20 animate-pulse font-mono">&lt;/&gt;</div>
+                <div className="absolute top-40 right-1/4 text-xl text-blue-400/20 animate-bounce font-mono">{}</div>
+                <div className="absolute bottom-32 left-1/3 text-lg text-purple-400/20 animate-spin font-mono">[]</div>
+              </div>
+              <div className="max-w-5xl w-full px-4 relative z-10">
                 <GitHubProjects />
               </div>
             </div>
           </>
-        )}
-
-        {/* Certificates Section */}
+        )}        {/* Certificates Section */}
         {activeFilter === 'Certificates' && (
           <>
             <motion.div
-              className="text-center mb-8"
+              className="text-center mb-8 relative"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-            >
-              <h1 className="text-4xl font-moranga mb-2" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
+            >              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#780000]/5 to-transparent blur-sm dark:via-[#c1121f]/5"></div>
+              <h1 className="text-4xl font-moranga mb-2 relative text-[#780000] dark:text-[#c1121f]">
                 My Certificates
               </h1>
-              <p className="text-[var(--muted)]">Achievements and qualifications</p>
+              <div className="w-32 h-1 bg-gradient-to-r from-[#780000] to-[#c1121f] mx-auto rounded-full animate-pulse dark:from-[#c1121f] dark:to-[#780000]"></div>
+              <p className="text-[var(--muted)] mt-2">Achievements and qualifications</p>
             </motion.div>
-            <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)]">
-              <div className="max-w-5xl w-full px-4">
+            <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)] relative">
+              {/* Achievement-themed decorative elements */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-16 left-1/4 text-2xl text-yellow-400/30 animate-bounce">🏆</div>
+                <div className="absolute top-32 right-1/4 text-xl text-orange-400/30 animate-pulse">🎖️</div>
+                <div className="absolute bottom-32 left-1/3 text-lg text-green-400/30 animate-spin">⭐</div>
+              </div>
+              <div className="max-w-5xl w-full px-4 relative z-10">
                 <CertificatesCard />
               </div>
             </div>
           </>
-        )}
-
-        {/* Creative Section */}
+        )}        {/* Creative Section */}
         {activeFilter === 'Creative' && (
           <>
             <motion.div
-              className="text-center mb-8"
+              className="text-center mb-8 relative"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-            >
-              <h1 className="text-4xl font-moranga mb-2" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
+            >              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#780000]/5 to-transparent blur-sm dark:via-[#c1121f]/5"></div>
+              <h1 className="text-4xl font-moranga mb-2 relative text-[#780000] dark:text-[#c1121f]">
                 Creative Corner
               </h1>
-              <p className="text-[var(--muted)]">My creative works and expressions</p>
+              <div className="w-32 h-1 bg-gradient-to-r from-[#780000] to-[#c1121f] mx-auto rounded-full animate-pulse dark:from-[#c1121f] dark:to-[#780000]"></div>
+              <p className="text-[var(--muted)] mt-2">My creative works and expressions</p>
             </motion.div>
-            <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)]">
-              <div className="max-w-7xl w-full px-4">
+            <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)] relative">
+              {/* Creative-themed decorative elements */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-16 left-1/4 text-2xl text-pink-400/30 animate-spin">🎨</div>
+                <div className="absolute top-32 right-1/4 text-xl text-purple-400/30 animate-bounce">✨</div>
+                <div className="absolute bottom-32 left-1/3 text-lg text-indigo-400/30 animate-pulse">🌟</div>
+                <div className="absolute bottom-16 right-1/3 text-sm text-cyan-400/30 animate-ping">💫</div>
+              </div>
+              <div className="max-w-7xl w-full px-4 relative z-10">
                 <CreativeCard />
               </div>
             </div>
@@ -326,35 +300,54 @@ export default function Home() {
         {activeFilter === 'Blogs' && (
           <>
             <motion.div
-              className="text-center mb-8"
+              className="text-center mb-8 relative"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-            >
-              <h1 className="text-4xl font-moranga mb-2" style={{ color: theme === 'dark' ? '#c1121f' : '#780000' }}>
+            >              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#780000]/5 to-transparent blur-sm dark:via-[#c1121f]/5"></div>
+              <h1 className="text-4xl font-moranga mb-2 relative text-[#780000] dark:text-[#c1121f]">
                 My Blogs
               </h1>
-              <p className="text-[var(--muted)]">Sharing thoughts and experiences</p>
+              <div className="w-24 h-1 bg-gradient-to-r from-[#780000] to-[#c1121f] mx-auto rounded-full animate-pulse dark:from-[#c1121f] dark:to-[#780000]"></div>
+              <p className="text-[var(--muted)] mt-2">Sharing thoughts and experiences</p>
             </motion.div>
-            <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)]">
-              <div className="max-w-7xl w-full px-4">
+            <div className="flex justify-center items-start min-h-[calc(100vh-280px)] bg-[var(--background)] relative">
+              {/* Blog-themed decorative elements */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-16 left-1/4 text-2xl text-teal-400/30 animate-pulse">📝</div>
+                <div className="absolute top-32 right-1/4 text-xl text-blue-400/30 animate-bounce">💭</div>
+                <div className="absolute bottom-32 left-1/3 text-lg text-cyan-400/30 animate-spin">📚</div>
+              </div>
+              <div className="max-w-7xl w-full px-4 relative z-10">
                 <BlogsCard />
               </div>
             </div>
           </>
         )}
-      </main>
-
-      {/* Footer */}
-      <footer className="text-center py-8 px-4">
+      </main>      {/* Footer */}
+      <footer className="text-center py-8 px-4 relative">
+        {/* Decorative footer background */}
+        <div className="absolute inset-0 bg-gradient-to-t from-purple-500/5 via-transparent to-transparent"></div>
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-0.5 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
+        
         <motion.p
-          className="text-[var(--muted)] font-silka text-sm"
+          className="text-[var(--muted)] font-silka text-sm relative z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.7 }}
         >
-          Built by Bishal Shrestha 
+          Built by{' '}
+          <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent font-medium">
+            Bishal Shrestha
+          </span>
+          {' '}
         </motion.p>
+        
+        {/* Decorative sparkles */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute bottom-4 left-1/4 w-1 h-1 bg-purple-400 rounded-full animate-ping opacity-60"></div>
+          <div className="absolute bottom-6 right-1/4 w-1 h-1 bg-blue-400 rounded-full animate-pulse opacity-40"></div>
+        </div>
       </footer>
     </div>
   );

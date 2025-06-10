@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
     darkMode: ["class"],
@@ -49,12 +50,12 @@ export default {
           '3': 'hsl(var(--chart-3))',
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))'
-        }
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)'
+        }      },
+      fontFamily: {
+        'moranga': ['Moranga Bold', 'sans-serif'],
+        'silka': ['Silka Regular', 'sans-serif'],
+        'silka-medium': ['Silka Medium', 'sans-serif'],
+        'preeti': ['Preeti', 'sans-serif']
       },
       container: {
       center: true,
@@ -75,5 +76,5 @@ export default {
       },
     }
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;
