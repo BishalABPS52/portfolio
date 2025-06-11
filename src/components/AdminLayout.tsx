@@ -5,14 +5,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { 
   HomeIcon,
-  DocumentTextIcon,
-  VideoCameraIcon,
-  BookOpenIcon,
-  PaintBrushIcon,
-  ChatBubbleLeftRightIcon,
-  PencilSquareIcon,
-  UserGroupIcon,
-  TrophyIcon,
   CalendarIcon,
   ArrowRightOnRectangleIcon,
   Bars3Icon,
@@ -26,14 +18,6 @@ interface AdminLayoutProps {
 
 const adminMenuItems = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: HomeIcon },
-  { name: 'Blogs', href: '/admin/blogs', icon: DocumentTextIcon },
-  { name: 'Videos', href: '/admin/videos', icon: VideoCameraIcon },
-  { name: 'Poems', href: '/admin/poems', icon: BookOpenIcon },
-  { name: 'Designs', href: '/admin/designs', icon: PaintBrushIcon },
-  { name: 'Quotes', href: '/admin/quotes', icon: ChatBubbleLeftRightIcon },
-  { name: 'Essays', href: '/admin/essays', icon: PencilSquareIcon },
-  { name: 'Game Users', href: '/admin/game-users', icon: UserGroupIcon },
-  { name: 'Highscores', href: '/admin/highscores', icon: TrophyIcon },
   { name: 'Availability', href: '/admin/availability', icon: CalendarIcon },
 ];
 

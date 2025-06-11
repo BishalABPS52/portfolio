@@ -4,11 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   HomeIcon,
-  DocumentTextIcon,
-  VideoCameraIcon,
-  SparklesIcon,
-  ChatBubbleBottomCenterTextIcon,
-  BookOpenIcon
+  CalendarIcon
 } from '@heroicons/react/24/outline';
 
 const navigationItems = [
@@ -18,29 +14,9 @@ const navigationItems = [
     icon: HomeIcon,
   },
   {
-    name: 'Blogs',
-    href: '/admin/blogs',
-    icon: DocumentTextIcon,
-  },
-  {
-    name: 'Videos',
-    href: '/admin/videos',
-    icon: VideoCameraIcon,
-  },
-  {
-    name: 'Designs',
-    href: '/admin/designs',
-    icon: SparklesIcon,
-  },
-  {
-    name: 'Quotes',
-    href: '/admin/quotes',
-    icon: ChatBubbleBottomCenterTextIcon,
-    },
-  {
-    name: 'Essays',
-    href: '/admin/essays',
-    icon: BookOpenIcon,
+    name: 'Availability',
+    href: '/admin/availability',
+    icon: CalendarIcon,
   },
 ];
 
