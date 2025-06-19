@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Bishal Shrestha" }],
   creator: "Bishal Shrestha",
   openGraph: {
-    title: "Bishal Shrestha - Developer & Designer",
+    title: "Bishal Shrestha - Developer & Software Engineering Enthusiast",
     description: "Developer",
     url: "https://bishal.dev",
     siteName: "Bishal Shrestha Portfolio",
