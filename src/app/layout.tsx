@@ -32,7 +32,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Bishal Shrestha - Developer & Designer",
+  title: "Bishal Shrestha - Developer & Software Engineering Enthusiast",
   description:
     "Developer",
   icons: {
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bishal Shrestha - Developer & Designer",
+    title: "Bishal Shrestha - Developer & Software Engineering Enthusiast",
     description: "Developer",
     creator: "@BishalABPS52",
   },
