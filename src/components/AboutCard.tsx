@@ -41,8 +41,8 @@ export default function AboutCard() {
 
           <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-4">📚 Current Focus:</h3>
           <p className="text-sm sm:text-base mb-3 sm:mb-4">
-            I am currently focusing on learning Data Science, Software Development, Game Development, 
-            and Backend Technologies. Through personal projects, I continue to build my portfolio and 
+            I am currently focusing on learning Data Science, Software Development and Game Development, 
+            . Through personal projects, I continue to build my portfolio and 
             contribute to the open-source community.
           </p>
 
@@ -52,7 +52,6 @@ export default function AboutCard() {
             <li><strong>Programming:</strong> C++, Python, PHP</li>
             <li><strong>Data Science:</strong> NumPy, Matplotlib, Seaborn</li>
             <li><strong>Game Development:</strong> SFML, Game Testing</li>
-            <li><strong>Backend:</strong> Node.js, MySQL, XAMPP</li>
           </ul>
 
           <div className="mt-4 sm:mt-6 text-center">

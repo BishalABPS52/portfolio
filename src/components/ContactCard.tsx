@@ -66,7 +66,7 @@ const ContactCard = () => {
       icon: <Phone size={18} className="text-[#60A5FA]" />, 
       label: 'Phone', 
       value: '+977-9765532314', 
-      link: 'tel:+9779765532314',
+      link: 'https://wa.me/+9779814213742',
       color: '#60A5FA',
       bgGradient: 'from-blue-400/20 to-cyan-500/20'
     },
