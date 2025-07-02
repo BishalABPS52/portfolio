@@ -36,8 +36,34 @@ export const metadata: Metadata = {
   description:
     "Developer",
   icons: {
-    icon: '/favicon.ico',
-  },
+    icon: '/assets/images/favicon_io/favicon.ico',
+    apple: '/assets/images/favicon_io/apple-touch-icon.png',
+    shortcut: '/assets/images/favicon_io/favicon.ico',
+    other: [
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        url: '/assets/images/favicon_io/favicon-16x16.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        url: '/assets/images/favicon_io/favicon-32x32.png',
+      },
+      {
+        rel: 'android-chrome',
+        sizes: '192x192',
+        url: '/assets/images/favicon_io/android-chrome-192x192.png',
+      },
+      {
+        rel: 'android-chrome',
+        sizes: '512x512',
+        url: '/assets/images/favicon_io/android-chrome-512x512.png',
+      },
+    ],  },
+  manifest: '/assets/images/favicon_io/site.webmanifest',
   keywords: [
     "developer",
     "designer",
