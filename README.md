@@ -7,7 +7,6 @@ A modern, responsive portfolio website built with Next.js 14, featuring stunning
 - **Modern Design**: Clean, professional interface with a red-themed color scheme
 - **Responsive Layout**: Optimized for all devices and screen sizes
 - **Interactive Animations**: Smooth transitions and hover effects using Framer Motion
-- **Admin Dashboard**: Content management system for availability status
 - **Contact Form**: Integrated contact functionality
 - **CV Download**: Professional CV download feature
 - **Game Zone**: Interactive games and entertainment section
@@ -54,12 +53,6 @@ bishal-portfolio/
 - **Secondary Font**: Geist Sans
 - **Font Weights**: 300, 400, 500, 600, 700
 
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-- MongoDB (local or MongoDB Atlas)
 
 ### Installation
 
@@ -101,35 +94,6 @@ bishal-portfolio/
 - `npm run lint` - Run ESLint
 - `npm run type-check` - Run TypeScript type checking
 
-## 🌐 Deployment
-
-### Vercel Deployment (Recommended)
-
-1. **Prepare for deployment**
-   ```bash
-   ./deploy.sh
-   ```
-
-2. **Set up MongoDB Atlas**
-   - Create a MongoDB Atlas account
-   - Create a new cluster
-   - Get your connection string
-
-3. **Deploy to Vercel**
-   - Import your GitHub repository to Vercel
-   - Configure environment variables in Vercel dashboard
-   - Deploy!
-
-For detailed deployment instructions, see [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md)
-
-### Environment Variables for Production
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `MONGODB_URI` | MongoDB connection string | `mongodb+srv://user:pass@cluster.mongodb.net/bishal-portfolio` |
-| `ADMIN_PASSWORD` | Admin dashboard password | `your-secure-password` |
-| `NODE_ENV` | Environment setting | `production` |
-
 ## 🎮 Features Overview
 
 ### Main Portfolio Sections
@@ -141,36 +105,13 @@ For detailed deployment instructions, see [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOY
 5. **CV Card**: Comprehensive CV with download feature
 6. **Creative Card**: Creative projects showcase
 7. **Game Card**: Interactive games and entertainment
-
-### Admin Features
-
-- **Dashboard**: Overview of portfolio metrics
-- **Availability Management**: Update availability status
-- **Content Management**: Manage portfolio content
-
+   
 ### Technical Features
 
 - **Responsive Design**: Mobile-first approach
 - **Performance Optimized**: Fast loading and smooth animations
-- **SEO Friendly**: Optimized meta tags and structure
 - **Type Safe**: Full TypeScript implementation
 - **Modern Architecture**: Next.js 14 App Router
-
-## 🎨 Customization
-
-### Color Scheme
-The portfolio uses CSS custom properties for easy theming:
-
-```css
-:root {
-  --color-red-light: #780000;
-  --color-red: #c1121f;
-  --color-red-dark: #8b0000;
-}
-```
-
-### Animations
-Animations are built with Framer Motion and can be customized in individual components.
 
 ## 🤝 Contributing
 
@@ -187,7 +128,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact
 
 **Bishal Shrestha**
-- Email: contact@bishalshrestha.com
+- Email: bs426808@gmail.com
 - LinkedIn: [Bishal Shrestha](https://linkedin.com/in/bishal-shrestha)
 - GitHub: [bishal-shrestha](https://github.com/bishal-shrestha)
 
@@ -200,4 +141,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with ❤️ by Bishal Shrestha
+Built by Bishal Shrestha
