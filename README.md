@@ -14,10 +14,9 @@ A modern, responsive portfolio website built with Next.js 14, featuring stunning
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 14 (App Router), React 18, TypeScript
+- **Frontend**: Next.js 14, React 18, TypeScript
 - **Styling**: Tailwind CSS, Custom CSS
 - **Animations**: Framer Motion
-- **Database**: MongoDB with Mongoose
 - **Deployment**: Vercel
 - **Icons**: Lucide React
 - **Fonts**: Inter, Geist Sans
@@ -86,26 +85,7 @@ bishal-portfolio/
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 📦 Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run type-check` - Run TypeScript type checking
-
-## 🎮 Features Overview
-
-### Main Portfolio Sections
-
-1. **Bio Card**: Personal introduction with availability status
-2. **Experience Card**: Professional experience with expandable tech stacks
-3. **Certificates Card**: Educational achievements with zoom functionality
-4. **Contact Card**: Contact information with interactive elements
-5. **CV Card**: Comprehensive CV with download feature
-6. **Creative Card**: Creative projects showcase
-7. **Game Card**: Interactive games and entertainment
-   
 ### Technical Features
 
 - **Responsive Design**: Mobile-first approach
@@ -113,24 +93,12 @@ bishal-portfolio/
 - **Type Safe**: Full TypeScript implementation
 - **Modern Architecture**: Next.js 14 App Router
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 📞 Contact
 
 **Bishal Shrestha**
 - Email: bs426808@gmail.com
-- LinkedIn: [Bishal Shrestha](https://linkedin.com/in/bishal-shrestha)
-- GitHub: [bishal-shrestha](https://github.com/bishal-shrestha)
+- LinkedIn: [Bishal Shrestha](https://www.linkedin.com/in/bishal-shrestha-2b05b1302/)
+- GitHub: [bishal-shrestha](https://github.com/BishalABPS52/)
 
 ## 🙏 Acknowledgments
 
