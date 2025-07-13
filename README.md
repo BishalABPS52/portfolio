@@ -66,23 +66,12 @@ bishal-portfolio/
    npm install
    ```
 
-3. **Set up environment variables**
-   ```bash
-   cp .env.example .env.local
-   ```
-   Edit `.env.local` with your configuration:
-   ```env
-   MONGODB_URI=mongodb://localhost:27017/bishal-portfolio
-   ADMIN_PASSWORD=your-admin-password
-   NODE_ENV=development
-   ```
-
-4. **Run the development server**
+3. **Run the development server**
    ```bash
    npm run dev
    ```
 
-5. **Open your browser**
+4. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 
