@@ -38,13 +38,8 @@ const CertificatesCard = () => {
     setZoomedCertificate(cert);
   };
   
-  const certificates = [
-    { src: '/assets/certificates/c1.png', alt: 'Googling Competition' },
-    { src: '/assets/certificates/c2.jpg', alt: 'CCRC Scientic Circle Member' },
-    { src: '/assets/certificates/c3.jpg', alt: 'Math Quiz Competition' },
-    { src: '/assets/certificates/c4.jpg', alt: 'Online Global Quiz Competition' },
-    { src: '/assets/certificates/c5.jpeg', alt: 'Bits & Bytes Quiz Competition' },
-    { src: '/assets/certificates/c6.jpeg', alt: 'Sololearn "Introduction To C"' },
+ const certificates = [
+    { src: '/assets/certificates/c6.jpeg', alt: 'Sololearn "Introduction To C"' }
   ];
 
   return (
